@@ -3,22 +3,22 @@ import RouteListPoints from '../view/points-list-view.js';
 import RoutePoint from '../view/point-view.js';
 import {render} from '../render.js';
 
-const POINTS = 3;
-
 export default class Presenter {
   routeListPoints = new RouteListPoints();
   formEdit = new FormEdit();
 
-  constructor ({container}) {
+  constructor ({container, model}) {
     this.container = container;
+    this.model = model;
   }
 
   init() {
+    this.destination = this.model.getPoint();
     render(this.formEdit, this.container);
     render(this.routeListPoints, this.container);
 
-    for (let i = 0; i < POINTS; i++) {
-      render(new RoutePoint(), this.routeListPoints.getElement());
+    for (let i = 0; i < this.destination.length; i++) {
+      render(new RoutePoint({destination: this.destination}), this.routeListPoints.getElement());
     }
   }
 }
