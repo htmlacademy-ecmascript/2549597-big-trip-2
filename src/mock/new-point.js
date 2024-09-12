@@ -9,11 +9,12 @@ const getRoutePoint = () => ({
   timeStart: getRandomArrayElement(CONSTANTS.TIME.start),
   timeEnd: getRandomArrayElement(CONSTANTS.TIME.end),
   price: getRandomValue(0, CONSTANTS.MAX_PRICE),
-  offers: Array.from({length: getRandomValue(0, offers.length)}, getRandomArrayElement(offers)),
+  offers: Array.from({length: getRandomValue(0, offers.length)}, () => getRandomArrayElement(offers)),
   destinationCard: getRandomArrayElement(destinationCards),
 });
 
-export const RoutePoints = Array.from(
-  {length: getRandomValue(0, CONSTANTS.MAX_POINTS)}, () => getRoutePoint());
+export const RoutePoints = Array.from({length: getRandomValue(0, CONSTANTS.MAX_POINTS)}, () => getRoutePoint());
 
-export const getRandomPoint = getRandomArrayElement(RoutePoints);
+export function getRandomPoint() {
+  return getRandomArrayElement(RoutePoints);
+}

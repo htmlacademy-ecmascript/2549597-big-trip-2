@@ -13,12 +13,12 @@ export default class Presenter {
   }
 
   init() {
-    this.destination = this.model.getPoint();
+    this.destination = [...this.model.getPoint()];
     render(this.formEdit, this.container);
     render(this.routeListPoints, this.container);
 
     for (let i = 0; i < this.destination.length; i++) {
-      render(new RoutePoint({destination: this.destination}), this.routeListPoints.getElement());
+      render(new RoutePoint({destination: this.destination[i]}), this.routeListPoints.getElement());
     }
   }
 }

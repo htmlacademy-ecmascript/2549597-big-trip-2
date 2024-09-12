@@ -1,7 +1,7 @@
 import {getRandomArrayElement, getRandomValue} from '../utils.js';
 import {MAX_PRICE, DESCRIPTION, DESTINATIONS} from '../constants.js';
 
-const getDescriptions = () => Array.from({length: getRandomValue(0, DESCRIPTION.length)}, getRandomArrayElement(DESCRIPTION));
+const getDescriptions = () => Array.from({length: getRandomValue(0, DESCRIPTION.length)}, () => getRandomArrayElement(DESCRIPTION));
 
 const getPhotoSrc = () => `https://loremflickr.com/248/152?random=${getRandomValue(0, MAX_PRICE)}`;
 
