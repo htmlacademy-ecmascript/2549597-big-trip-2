@@ -12,7 +12,7 @@ const getPhoto = (array) => {
   return result;
 };
 
-function createFormEditTemplate(point, destination, offer) {//ДОПИСАТЬ OFFERS
+function createFormEditTemplate(point, destination) {//добавить и ДОПИСАТЬ OFFERS
   const {type, timeStart, timeEnd, price} = point;
   const {photos, description, townName} = destination;
 
