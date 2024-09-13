@@ -1,13 +1,13 @@
 export const ROUTE_TYPES = [
-  'Taxi',
-  'Bus',
-  'Train',
-  'Ship',
-  'Drive',
-  'Flight',
-  'Check-in',
-  'Sightseeing',
-  'Restaurant'
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant'
 ];
 export const DESTINATIONS = [
   'Amsterdam',
@@ -19,32 +19,24 @@ export const DESTINATIONS = [
   'Italy',
   'USA'
 ];
-export const TITLES = [
-  'Add luggage',
-  'Switch to comfort class',
-  'Add meal',
-  'Choose seats',
-  'Travel by train'
-];
 export const MAX_PRICE = 10000;
-export const MAX_POINTS = 15;
-export const CHECKED = ['true', 'false'];
+export const MAX_POINTS = 6;
 export const TIME = {
   start: [
-    '19/03/19 00:00',
-    '20/03/19 00:00',
-    '08/03/20 15:00',
-    '19/04/19 11:18',
-    '01/01/19 00:00',
-    '15/12/19 13:00'
+    '2020-04-02 02:17',
+    '2020-04-04 03:05',
+    '2020-04-06 03:22',
+    '2020-04-08 11:56',
+    '2020-04-10 22:22',
+    '2020-04-12 21:00'
   ],
   end: [
-    '20/03/19 10:00',
-    '21/04/19 10:00',
-    '20/07/20 14:00',
-    '25/01/20 15:25',
-    '02/02/19 10:00',
-    '25/12/19 22:00'
+    '2020-04-02 02:19',
+    '2020-04-04 03:17',
+    '2020-04-07 04:17',
+    '2020-04-08 12:00',
+    '2020-04-11 22:30',
+    '2020-04-12 21:05',
   ],
 };
 export const DESCRIPTION = [
@@ -60,3 +52,4 @@ export const DESCRIPTION = [
   'Nunc fermentum tortor ac porta dapibus.',
   'In rutrum ac purus sit amet tempus.'
 ];
+export const FAVORITE = ['true', 'false'];
