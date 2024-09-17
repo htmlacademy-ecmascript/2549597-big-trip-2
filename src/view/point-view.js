@@ -1,16 +1,18 @@
 import {createElement} from '../render.js';
 import {getDate, getDifferenceDate} from '../utils.js';
 
-const getMapOffers = (offers) => {
-  let result = '';
-  for (let i = 0; i < offers.length; i++) {
-    result += (`<li class="event__offer">
-      <span class="event__offer-title">${offers[i].title}</span>
+const getOffersMarkup = (offers) => {
+  let markup = '';
+
+  offers.forEach((offer) => {
+    markup += (`<li class="event__offer">
+      <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offers[i].price}</span>
+      <span class="event__offer-price">${offer.price}</span>
       </li> `);
-  }
-  return result;
+  });
+
+  return markup;
 };
 
 function createRoutePointTemplate(point, destination, offer) {
@@ -45,7 +47,7 @@ function createRoutePointTemplate(point, destination, offer) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  ${getMapOffers(offers)}
+                  ${getOffersMarkup(offers)}
                 </ul>
                 <button class="event__favorite-btn ${favorite}" type="button">
                   <span class="visually-hidden">Add to favorite</span>

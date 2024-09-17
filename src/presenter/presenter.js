@@ -16,19 +16,19 @@ export default class Presenter {
   }
 
   init() {
-    this.point = [...this.pointModel.getPoint()];
+    this.points = [...this.pointModel.getPoint()];
 
-    render(new FormEdit({point: this.point[ELEMENT_NUMBER],
-      destination: this.destinationModel.getDestinationById(this.point[ELEMENT_NUMBER].id),
-      offer: this.offerModel.getOffersByType(this.point[ELEMENT_NUMBER].type)
+    render(new FormEdit({point: this.points[ELEMENT_NUMBER],
+      destination: this.destinationModel.getDestinationById(this.points[ELEMENT_NUMBER].id),
+      offer: this.offerModel.getOffersByType(this.points[ELEMENT_NUMBER].type)
     }), this.container);
     render(this.routeListPoints, this.container);
 
-    for (let i = 0; i < this.point.length; i++) {
-      render(new RoutePoint({point: this.point[i],
-        destination: this.destinationModel.getDestinationById(this.point[i].id),
-        offer: this.offerModel.getOffersByType(this.point[i].type)
+    this.points.forEach((point) => {
+      render(new RoutePoint({point,
+        destination: this.destinationModel.getDestinationById(point.id),
+        offer: this.offerModel.getOffersByType(point.type)
       }), this.routeListPoints.getElement());
-    }
+    });
   }
 }
