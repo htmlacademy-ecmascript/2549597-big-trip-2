@@ -3,22 +3,32 @@ import RouteListPoints from '../view/points-list-view.js';
 import RoutePoint from '../view/point-view.js';
 import {render} from '../render.js';
 
-const POINTS = 3;
-
+const ELEMENT_NUMBER = 3;
 export default class Presenter {
   routeListPoints = new RouteListPoints();
-  formEdit = new FormEdit();
 
-  constructor ({container}) {
+
+  constructor ({container, pointModel, destinationModel, offerModel}) {
     this.container = container;
+    this.pointModel = pointModel;
+    this.destinationModel = destinationModel;
+    this.offerModel = offerModel;
   }
 
   init() {
-    render(this.formEdit, this.container);
+    this.points = [...this.pointModel.getPoint()];
+
+    render(new FormEdit({point: this.points[ELEMENT_NUMBER],
+      destination: this.destinationModel.getDestinationById(this.points[ELEMENT_NUMBER].id),
+      offer: this.offerModel.getOffersByType(this.points[ELEMENT_NUMBER].type)
+    }), this.container);
     render(this.routeListPoints, this.container);
 
-    for (let i = 0; i < POINTS; i++) {
-      render(new RoutePoint(), this.routeListPoints.getElement());
-    }
+    this.points.forEach((point) => {
+      render(new RoutePoint({point,
+        destination: this.destinationModel.getDestinationById(point.id),
+        offer: this.offerModel.getOffersByType(point.type)
+      }), this.routeListPoints.getElement());
+    });
   }
 }
