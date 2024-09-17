@@ -18,7 +18,7 @@ export default class Presenter {
   init() {
     this.point = [...this.pointModel.getPoint()];
 
-    render(new FormEdit({point: this.point(ELEMENT_NUMBER),
+    render(new FormEdit({point: this.point[ELEMENT_NUMBER],
       destination: this.destinationModel.getDestinationById(this.point[ELEMENT_NUMBER].id),
       offer: this.offerModel.getOffersByType(this.point[ELEMENT_NUMBER].type)
     }), this.container);

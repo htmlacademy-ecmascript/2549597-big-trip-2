@@ -52,4 +52,4 @@ export const DESCRIPTION = [
   'Nunc fermentum tortor ac porta dapibus.',
   'In rutrum ac purus sit amet tempus.'
 ];
-export const FAVORITE = ['true', 'false'];
+export const FAVORITE = [true, false];
