@@ -17,3 +17,5 @@ export const getDifferenceDate = (start, end) => {
 
   return dateTo.diff(dateFrom, 'm');
 };
+
+export const isEscKey = (evt) => evt.key === 'Escape';
