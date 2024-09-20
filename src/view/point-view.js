@@ -23,8 +23,8 @@ function createRoutePointTemplate(point, destination, offer) {
   const favorite = isFavorite ? 'event__favorite-btn--active' : '';
   const date = getDate(timeStart, 'MMM D');
   const fullDate = getDate(timeStart, 'YYYY-MM-DD');
-  const startingTime = getDate(timeStart, 'hh:mm');
-  const endingTime = getDate(timeEnd, 'hh:mm');
+  const startingTime = getDate(timeStart, 'HH:mm');
+  const endingTime = getDate(timeEnd, 'HH:mm');
   const difTime = getDifferenceDate(timeStart, timeEnd);
 
   return (`<li class="trip-events__item">
