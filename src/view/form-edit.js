@@ -1,5 +1,5 @@
 
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {getDate} from '../utils.js';
 
 const getPhoto = (array) => {
@@ -35,8 +35,8 @@ function createFormEditTemplate(point, destination, offer) {
   const {offers} = offer;
 
   const photoArray = getPhoto(photos);
-  const dateStart = getDate(timeStart, 'DD/MM/YY hh:mm');
-  const dateEnd = getDate(timeEnd, 'DD/MM/YY hh:mm');
+  const dateStart = getDate(timeStart, 'DD/MM/YY HH:mm');
+  const dateEnd = getDate(timeEnd, 'DD/MM/YY HH:mm');
 
   return (`<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -155,27 +155,28 @@ function createFormEditTemplate(point, destination, offer) {
               </form>`);
 }
 
-export default class FormEdit {
-  constructor({point, destination, offer}) {
-    this.point = point;
-    this.destination = destination;
-    this.offer = offer;
+export default class FormEdit extends AbstractView{
+  #point = null;
+  #destination = null;
+  #offer = null;
+  #handleSubmit = null;
+
+  constructor({point, destination, offer, onSubmit}) {
+    super();
+    this.#point = point;
+    this.#destination = destination;
+    this.#offer = offer;
+    this.#handleSubmit = onSubmit;
+    this.element.addEventListener('submit', this.#submitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#submitHandler);
   }
 
-  getTemplate() {
-    return createFormEditTemplate(this.point, this.destination, this.offer);
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleSubmit();
+  };
+
+  get template() {
+    return createFormEditTemplate(this.#point, this.#destination, this.#offer);
   }
-
-  getElement() {
-    if(!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-
 }

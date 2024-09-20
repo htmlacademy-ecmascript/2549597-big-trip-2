@@ -1,10 +1,10 @@
 import {destinationCards} from '../mock/destination.js';
 
 export default class DestinationModel {
-  destinationCards = destinationCards;
+  #destinationCards = destinationCards;
 
-  getDestination() {
-    return this.destinationCards;
+  get destination() {
+    return this.#destinationCards;
   }
 
   getDestinationById(id) {
