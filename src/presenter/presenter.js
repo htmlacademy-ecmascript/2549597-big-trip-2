@@ -1,7 +1,7 @@
 import FormEdit from '../view/form-edit.js';
 import RouteListPoints from '../view/points-list-view.js';
 import RoutePoint from '../view/point-view.js';
-import {render, RenderPosition, remove} from '../framework/render.js';
+import {render, replace} from '../framework/render.js';
 import {isEscKey} from '../utils.js';
 export default class Presenter {
   #routeListPoints = new RouteListPoints();
@@ -30,44 +30,42 @@ export default class Presenter {
   }
 
   #renderPoint (point) {
+    const onEditFormKeydown = (evt) => {
+      if (isEscKey(evt)) {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEditFormKeydown);
+      }
+    };
+
     const routePoint = new RoutePoint({
       point,
       destination: this.#destinationModel.getDestinationById(point.id),
       offer: this.#offerModel.getOffersByType(point.type),
-      onClick: () => this.#openEditForm(point)
+      onClick: () => {
+        replacePointToForm();
+        document.addEventListener('keydown', onEditFormKeydown);
+      }
     });
 
-    render(routePoint, this.#routeListPoints.element);
-  }
-
-  #openEditForm = (point) => {
     const formEdit = new FormEdit({
       point,
       destination: this.#destinationModel.getDestinationById(point.id),
       offer: this.#offerModel.getOffersByType(point.type),
-      onSubmit: () => this.#closeEditForm(formEdit)
+      onSubmit: () => {
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEditFormKeydown);
+      }
     });
 
-    document.addEventListener('keydown', (evt) => {
-      this.#onDocumentKeydown(evt, formEdit);
-    });
-
-    render(formEdit, this.#container, RenderPosition.AFTERBEGIN);
-  };
-
-
-  #closeEditForm = (form) => {
-    document.removeEventListener('keydown', (evt) => {
-      this.#onDocumentKeydown(evt, form);
-    });
-
-    remove(form);
-  };
-
-  #onDocumentKeydown = (evt, form) => {
-    if (isEscKey(evt)) {
-      evt.preventDefault();
-      this.#closeEditForm(form);
+    function replacePointToForm () {
+      replace(formEdit, routePoint);
     }
-  };
+
+    function replaceFormToPoint () {
+      replace(routePoint, formEdit);
+    }
+
+    render(routePoint, this.#routeListPoints.element);
+  }
 }

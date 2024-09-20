@@ -35,8 +35,8 @@ function createFormEditTemplate(point, destination, offer) {
   const {offers} = offer;
 
   const photoArray = getPhoto(photos);
-  const dateStart = getDate(timeStart, 'DD/MM/YY hh:mm');
-  const dateEnd = getDate(timeEnd, 'DD/MM/YY hh:mm');
+  const dateStart = getDate(timeStart, 'DD/MM/YY HH:mm');
+  const dateEnd = getDate(timeEnd, 'DD/MM/YY HH:mm');
 
   return (`<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
