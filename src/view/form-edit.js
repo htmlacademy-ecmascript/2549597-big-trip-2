@@ -1,6 +1,6 @@
 
 import AbstractView from '../framework/view/abstract-view.js';
-import {getDate} from '../utils.js';
+import {getDate} from '../utils/utils.js';
 
 const getPhoto = (array) => {
   let markupPhotos = '';
@@ -113,10 +113,10 @@ function createFormEditTemplate(point, destination, offer) {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateStart}>
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateStart}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateEnd}>
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">

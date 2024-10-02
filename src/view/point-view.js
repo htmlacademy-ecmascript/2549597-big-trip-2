@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getDate, getDifferenceDate} from '../utils.js';
+import {getDate, getDifferenceDate} from '../utils/utils.js';
 
 const getOffersMarkup = (offers) => {
   let markup = '';
@@ -24,6 +24,8 @@ function createRoutePointTemplate(point, destination, offer) {
   const date = getDate(timeStart, 'MMM D');
   const fullDate = getDate(timeStart, 'YYYY-MM-DD');
   const startingTime = getDate(timeStart, 'HH:mm');
+  const dateStart = getDate(timeStart, 'DD/MM/YY');
+  const dateEnd = getDate(timeEnd, 'DD/MM/YY');
   const endingTime = getDate(timeEnd, 'HH:mm');
   const difTime = getDifferenceDate(timeStart, timeEnd);
 
@@ -36,9 +38,9 @@ function createRoutePointTemplate(point, destination, offer) {
                 <h3 class="event__title">${type} ${townName}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T10:30">${startingTime}</time>
+                    <time class="event__start-time" datetime="${dateStart}">${startingTime}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T11:00">${endingTime}</time>
+                    <time class="event__end-time" datetime="${dateEnd}">${endingTime}</time>
                   </p>
                   <p class="event__duration">${difTime}M</p>
                 </div>

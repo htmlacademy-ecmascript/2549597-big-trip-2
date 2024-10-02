@@ -53,3 +53,15 @@ export const DESCRIPTION = [
   'In rutrum ac purus sit amet tempus.'
 ];
 export const FAVORITE = [true, false];
+export const FilterType = {
+  PAST: 'past',
+  EVERTHING: 'everthing',
+  PRESENT: 'present',
+  FUTURE: 'future',
+};
+export const EmptyListText = {
+  EVERTHING: 'Click New Event to create your first point',
+  PAST: 'There are no past events now',
+  PRESENT: 'There are no present events now',
+  FUTURE: 'There are no future events now',
+};
