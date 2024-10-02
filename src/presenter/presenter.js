@@ -2,7 +2,8 @@ import FormEdit from '../view/form-edit.js';
 import RouteListPoints from '../view/points-list-view.js';
 import RoutePoint from '../view/point-view.js';
 import {render, replace} from '../framework/render.js';
-import {isEscKey} from '../utils.js';
+import {isEscKey} from '../utils/utils.js';
+import EmptyList from '../view/empty-list.js';
 export default class Presenter {
   #routeListPoints = new RouteListPoints();
 
@@ -20,13 +21,16 @@ export default class Presenter {
   }
 
   init() {
-    this.#points = [...this.#pointModel.point];
+    this.#points = [...this.#pointModel.points];
 
-    render(this.#routeListPoints, this.#container);
-
-    this.#points.forEach((point) => {
-      this.#renderPoint(point);
-    });
+    if (this.#points.length < 1) {
+      render(new EmptyList({messageType: 'PRESENT'}), this.#container);
+    } else {
+      render(this.#routeListPoints, this.#container);
+      this.#points.forEach((point) => {
+        this.#renderPoint(point);
+      });
+    }
   }
 
   #renderPoint (point) {

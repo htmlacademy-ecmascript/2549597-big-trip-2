@@ -19,3 +19,5 @@ export const getDifferenceDate = (start, end) => {
 };
 
 export const isEscKey = (evt) => evt.key === 'Escape';
+
+export const convertFirstLetter = (word) => word.charAt(0).toUpperCase() + word.slice(1);
