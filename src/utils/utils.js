@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+const checkNumberMoreNine = (number) => number > 9 ? '' : '0';
+
 export const getRandomArrayElement = (array) => array[Math.floor(Math.random() * array.length)];
 export const getRandomValue = (min, max) => {
   const lower = Math.ceil(Math.min(min, max));
@@ -15,7 +17,11 @@ export const getDifferenceDate = (start, end) => {
   const dateFrom = dayjs(start);
   const dateTo = dayjs(end);
 
-  return dateTo.diff(dateFrom, 's');
+  return {
+    days: dateTo.diff(dateFrom, 'd'),
+    hours: dateTo.diff(dateFrom, 'h') % 24,
+    minutes: dateTo.diff(dateFrom, 'm') % 60,
+  };
 };
 
 export const isEscKey = (evt) => evt.key === 'Escape';
@@ -24,16 +30,20 @@ export const convertFirstLetter = (word) => word.charAt(0).toUpperCase() + word.
 
 export const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
 
-export const getConvertedTime = (seconds) => {
-  const days = parseInt(seconds / (24 * 3600), 10);
 
-  seconds = seconds % (24 * 3600);
+export const getConvertedTime = ({days, hours, minutes}) => {
+  if (days === 0 && hours === 0) {
+    return `${checkNumberMoreNine(minutes)}${minutes}M`;
+  }
 
-  const hours = parseInt(seconds / 3600, 10);
+  if (days === 0 && hours !== 0) {
+    return `${checkNumberMoreNine(hours)}${hours}H
+            ${checkNumberMoreNine(minutes)}${minutes}M`;
+  }
 
-  seconds %= 3600;
-
-  const minutes = seconds / 60;
-
-  return `${days}D ${hours}H ${minutes}M`;
+  if (days !== 0) {
+    return `${checkNumberMoreNine(days)}${days}D
+            ${checkNumberMoreNine(hours)}${hours}H
+            ${checkNumberMoreNine(minutes)}${minutes}M`;
+  }
 };
