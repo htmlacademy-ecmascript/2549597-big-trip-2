@@ -16,8 +16,6 @@ export const DESTINATIONS = [
   'Berlin',
   'Tokio',
   'France',
-  'Italy',
-  'USA'
 ];
 export const MAX_PRICE = 10000;
 export const MAX_POINTS = 6;

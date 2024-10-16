@@ -1,17 +1,18 @@
-import FormEdit from '../view/form-edit.js';
 import RouteListPoints from '../view/points-list-view.js';
-import RoutePoint from '../view/point-view.js';
-import {render, replace} from '../framework/render.js';
-import {isEscKey} from '../utils/utils.js';
+import {render} from '../framework/render.js';
 import EmptyList from '../view/empty-list.js';
+import PointPresenter from '../presenter/point-presenter.js';
+import {updateItem} from '../utils/utils.js';
 export default class Presenter {
   #routeListPoints = new RouteListPoints();
+  #emptyListPoints = new EmptyList({messageType: 'PRESENT'});
 
   #container = null;
   #pointModel = null;
   #destinationModel = null;
   #offerModel = null;
   #points = [];
+  #pointPresenters = new Map();
 
   constructor ({container, pointModel, destinationModel, offerModel}) {
     this.#container = container;
@@ -23,53 +24,54 @@ export default class Presenter {
   init() {
     this.#points = [...this.#pointModel.points];
 
+    this.#renderBoard();
+  }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #renderNoPoint() {
+    render(this.#emptyListPoints, this.#container);
+  }
+
+  #renderBoard() {
+    render(this.#routeListPoints, this.#container);
+
     if (this.#points.length < 1) {
-      render(new EmptyList({messageType: 'PRESENT'}), this.#container);
-    } else {
-      render(this.#routeListPoints, this.#container);
-      this.#points.forEach((point) => {
-        this.#renderPoint(point);
-      });
+      this.#renderNoPoint();
+
+      return;
     }
+
+    this.#renderPoints();
+  }
+
+  #renderPoints() {
+    this.#points.forEach((point) => {
+      this.#renderPoint(point);
+    });
   }
 
   #renderPoint (point) {
-    const onEditFormKeydown = (evt) => {
-      if (isEscKey(evt)) {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEditFormKeydown);
-      }
-    };
+    const pointPresenter = new PointPresenter({
+      pointContainer: this.#routeListPoints.element,
+      destinationModel: this.#destinationModel,
+      offerModel: this.#offerModel,
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange});
 
-    const routePoint = new RoutePoint({
-      point,
-      destination: this.#destinationModel.getDestinationById(point.id),
-      offer: this.#offerModel.getOffersByType(point.type),
-      onClick: () => {
-        replacePointToForm();
-        document.addEventListener('keydown', onEditFormKeydown);
-      }
-    });
-
-    const formEdit = new FormEdit({
-      point,
-      destination: this.#destinationModel.getDestinationById(point.id),
-      offer: this.#offerModel.getOffersByType(point.type),
-      onSubmit: () => {
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEditFormKeydown);
-      }
-    });
-
-    function replacePointToForm () {
-      replace(formEdit, routePoint);
-    }
-
-    function replaceFormToPoint () {
-      replace(routePoint, formEdit);
-    }
-
-    render(routePoint, this.#routeListPoints.element);
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #clearPoints() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
 }
