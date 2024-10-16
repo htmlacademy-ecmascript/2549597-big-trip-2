@@ -15,7 +15,7 @@ export const getDifferenceDate = (start, end) => {
   const dateFrom = dayjs(start);
   const dateTo = dayjs(end);
 
-  return dateTo.diff(dateFrom, 'm');
+  return dateTo.diff(dateFrom, 's');
 };
 
 export const isEscKey = (evt) => evt.key === 'Escape';
@@ -23,3 +23,17 @@ export const isEscKey = (evt) => evt.key === 'Escape';
 export const convertFirstLetter = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
 export const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
+
+export const getConvertedTime = (seconds) => {
+  const days = parseInt(seconds / (24 * 3600), 10);
+
+  seconds = seconds % (24 * 3600);
+
+  const hours = parseInt(seconds / 3600, 10);
+
+  seconds %= 3600;
+
+  const minutes = seconds / 60;
+
+  return `${days}D ${hours}H ${minutes}M`;
+};
