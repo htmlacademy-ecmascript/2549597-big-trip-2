@@ -32,18 +32,9 @@ export const updateItem = (items, update) => items.map((item) => item.id === upd
 
 
 export const getConvertedTime = ({days, hours, minutes}) => {
-  if (days === 0 && hours === 0) {
-    return `${checkNumberMoreNine(minutes)}${minutes}M`;
-  }
+  const formattedDays = days ? `${checkNumberMoreNine(days)}${days}D ` : '';
+  const formattedHours = hours ? `${checkNumberMoreNine(hours)}${hours}H ` : '';
+  const formattedMinutes = minutes ? `${checkNumberMoreNine(minutes)}${minutes}M ` : '';
 
-  if (days === 0 && hours !== 0) {
-    return `${checkNumberMoreNine(hours)}${hours}H
-            ${checkNumberMoreNine(minutes)}${minutes}M`;
-  }
-
-  if (days !== 0) {
-    return `${checkNumberMoreNine(days)}${days}D
-            ${checkNumberMoreNine(hours)}${hours}H
-            ${checkNumberMoreNine(minutes)}${minutes}M`;
-  }
+  return formattedDays + formattedHours + formattedMinutes;
 };
