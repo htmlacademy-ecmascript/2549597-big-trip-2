@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getDate, getDifferenceDate} from '../utils/utils.js';
+import {getDate, getDifferenceDate, getConvertedTime} from '../utils/utils.js';
 
 const getOffersMarkup = (offers) => {
   let markup = '';
@@ -28,6 +28,7 @@ function createRoutePointTemplate(point, destination, offer) {
   const dateEnd = getDate(timeEnd, 'DD/MM/YY');
   const endingTime = getDate(timeEnd, 'HH:mm');
   const difTime = getDifferenceDate(timeStart, timeEnd);
+  const convertedTime = getConvertedTime(difTime);
 
   return (`<li class="trip-events__item">
               <div class="event">
@@ -42,7 +43,7 @@ function createRoutePointTemplate(point, destination, offer) {
                     &mdash;
                     <time class="event__end-time" datetime="${dateEnd}">${endingTime}</time>
                   </p>
-                  <p class="event__duration">${difTime}M</p>
+                  <p class="event__duration">${convertedTime}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -69,19 +70,28 @@ export default class RoutePoint extends AbstractView{
   #destination = null;
   #offer = null;
   #handleClick = null;
+  #handleFavoriteClick = null;
 
-  constructor({point, destination, offer, onClick}) {
+  constructor({point, destination, offer, onClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#destination = destination;
     this.#offer = offer;
     this.#handleClick = onClick;
+    this.#handleFavoriteClick = onFavoriteClick;
+
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   #clickHandler = (evt) => {
     evt.preventDefault();
     this.#handleClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 
   get template() {
