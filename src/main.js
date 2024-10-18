@@ -1,5 +1,4 @@
 import Filters from './view/filters-view.js';
-import Sorting from './view/sorting-view.js';
 import Presenter from './presenter/presenter.js';
 import PointModel from './model/point-model.js';
 import DestinationModel from './model/destination-model.js';
@@ -16,5 +15,4 @@ const offerModel = new OfferModel();
 const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel});
 
 render(new Filters(), siteFilterContainer);
-render(new Sorting(), siteSortingContainer);
 presenter.init();
