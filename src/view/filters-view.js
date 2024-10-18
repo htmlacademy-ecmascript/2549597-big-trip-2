@@ -4,7 +4,7 @@ import {FilterType} from '../constants.js';
 
 function createFilterItemTemplate(filter) {
   return (`<div class="trip-filters__filter">
-            <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter}" ${(filter === 'everything') ? 'checked' : ''}>
+            <input id="filter-${filter}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter}" ${(filter === 'everthing') ? 'checked' : ''}>
             <label class="trip-filters__filter-label" for="filter-${filter}">${convertFirstLetter(filter)}</label>
           </div>`);
 }
