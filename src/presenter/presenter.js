@@ -58,8 +58,6 @@ export default class Presenter {
   }
 
   #sortPoints(sortType) {
-    this.#currentSortType = sortType;
-
     switch(sortType) {
       case SortTypes.DAY:
         this.#points.sort(sortPointsByDay);
@@ -76,6 +74,8 @@ export default class Presenter {
   }
 
   #handleSortTypeChange = (sortType) => {
+    this.#currentSortType = sortType;
+
     this.#sortPoints(sortType);
     this.#clearPoints();
     this.#renderPoints();
