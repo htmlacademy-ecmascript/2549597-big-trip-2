@@ -23,17 +23,17 @@ export const TIME = {
   start: [
     '2020-04-02 02:17',
     '2020-04-04 03:05',
-    '2020-04-06 03:22',
+    '2020-02-06 03:22',
     '2020-04-08 11:56',
-    '2020-04-10 22:22',
-    '2020-04-12 21:00'
+    '2020-03-12 22:22',
+    '2020-03-12 21:00'
   ],
   end: [
     '2020-04-02 02:19',
     '2020-04-04 03:17',
-    '2020-04-07 04:17',
+    '2020-02-08 04:17',
     '2020-04-08 12:00',
-    '2020-04-11 22:30',
+    '2020-03-14 22:30',
     '2020-04-12 21:05',
   ],
 };
@@ -56,6 +56,11 @@ export const FilterType = {
   EVERTHING: 'everthing',
   PRESENT: 'present',
   FUTURE: 'future',
+};
+export const SortTypes = {
+  PRICE: 'price',
+  DAY: 'day',
+  TIME: 'time',
 };
 export const EmptyListText = {
   EVERTHING: 'Click New Event to create your first point',
