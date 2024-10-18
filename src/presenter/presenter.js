@@ -74,6 +74,10 @@ export default class Presenter {
   }
 
   #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
     this.#currentSortType = sortType;
 
     this.#sortPoints(sortType);
