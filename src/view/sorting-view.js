@@ -6,7 +6,7 @@ function createSortingTemplate(type) {
 
   return (`<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             <div class="trip-sort__item  trip-sort__item--day">
-              <input id="sort-day" class="trip-sort__input  visually-hidden" data-sort-type="${SortTypes.DAY}" ${isChecked(SortTypes.DAY)}type="radio" name="trip-sort" value="sort-day">
+              <input id="sort-day" class="trip-sort__input  visually-hidden" data-sort-type="${SortTypes.DAY}" ${isChecked(SortTypes.DAY)} type="radio" name="trip-sort" value="sort-day">
               <label class="trip-sort__btn" for="sort-day">Day</label>
             </div>
 
@@ -34,16 +34,18 @@ function createSortingTemplate(type) {
 
 export default class Sorting extends AbstractView{
   #handleSortTypeChange = null;
+  #currentSort = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({onSortTypeChange, currentSort}) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
+    this.#currentSort = currentSort;
 
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createSortingTemplate(this.#sortTypeChangeHandler);
+    return createSortingTemplate(this.#currentSort);
   }
 
   #sortTypeChangeHandler = (evt) => {

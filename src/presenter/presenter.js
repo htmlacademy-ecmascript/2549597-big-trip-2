@@ -1,5 +1,5 @@
 import RouteListPoints from '../view/points-list-view.js';
-import {render, RenderPosition} from '../framework/render.js';
+import {render, RenderPosition, remove} from '../framework/render.js';
 import EmptyList from '../view/empty-list.js';
 import PointPresenter from '../presenter/point-presenter.js';
 import {updateItem} from '../utils/utils.js';
@@ -54,11 +54,12 @@ export default class Presenter {
       return;
     }
 
-    this.#renderSorting();
     this.#renderPoints();
   }
 
   #sortPoints(sortType) {
+    this.#currentSortType = sortType;
+
     switch(sortType) {
       case SortTypes.DAY:
         this.#points.sort(sortPointsByDay);
@@ -72,15 +73,9 @@ export default class Presenter {
       default:
         this.#points = this.#points.sort(sortPointsByDay);
     }
-
-    this.#currentSortType = sortType;
   }
 
   #handleSortTypeChange = (sortType) => {
-    // if (this.#currentSortType === sortType) {
-    //   return;
-    // }
-
     this.#sortPoints(sortType);
     this.#clearPoints();
     this.#renderPoints();
@@ -88,13 +83,16 @@ export default class Presenter {
 
   #renderSorting() {
     this.#sortComponent = new Sorting({
-      onSortTypeChange: this.#handleSortTypeChange
+      onSortTypeChange: this.#handleSortTypeChange,
+      currentSort: this.#currentSortType
     });
 
     render(this.#sortComponent, this.#container, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoints() {
+    this.#renderSorting();
+
     this.#points.forEach((point) => {
       this.#renderPoint(point);
     });
@@ -113,6 +111,7 @@ export default class Presenter {
   }
 
   #clearPoints() {
+    remove(this.#sortComponent);
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
