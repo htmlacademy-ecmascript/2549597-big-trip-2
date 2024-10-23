@@ -19,7 +19,6 @@ export default class Presenter {
   #currentSortType = SortTypes.DAY;
   #sourcedBoardPoints = [];
   #pointPresenters = new Map();
-  #currentPresenter = null;
 
   constructor ({container, pointModel, destinationModel, offerModel}) {
     this.#container = container;
@@ -114,12 +113,11 @@ export default class Presenter {
 
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
-    this.#currentPresenter = pointPresenter;
   }
 
-  #clearPoint = () => {
-    // const targetPresenter = this.#routeListPoints.element.get(point.id);
-    this.#currentPresenter.destroy();
+  #clearPoint = (point) => {
+    const targetPresenter = this.#pointPresenters.get(point.id);
+    targetPresenter.destroy();
   };
 
   #clearPoints() {

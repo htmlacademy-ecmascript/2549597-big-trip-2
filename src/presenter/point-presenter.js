@@ -54,6 +54,7 @@ export default class PointPresenter {
       offer: this.#offerModel,
       onSubmit: this.#handleFormSubmit,
       onFormDeleteClick: this.#handleFormDeleteClick,
+      onCloseForm: this.#handleCloseForm
     });
 
     if (prevRoutePoint === null || prevFormEdit === null) {
@@ -74,9 +75,12 @@ export default class PointPresenter {
     remove(prevRoutePoint);
   }
 
+  #handleCloseForm = (point) => {
+    this.#formEdit.reset(point);
+    this.#replaceFormToPoint();
+  };
+
   #handleFormDeleteClick = (update) => {
-    // this.#handleDataChange(update);
-    // this.#replaceFormToPoint();
     this.#replaceFormToPoint();
     this.#clearPoint(update);
     document.removeEventListener('keydown', this.#onEditFormKeydown);
