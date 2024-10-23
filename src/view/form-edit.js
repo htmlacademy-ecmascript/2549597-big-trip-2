@@ -247,7 +247,7 @@ export default class FormEdit extends AbstractStatefulView{
 
   #formPriceHandler = (evt) => {
     evt.preventDefault();
-    this._setState({...this._state.point,
+    this._setState({...this._state,
       price: Number(evt.target.value),
     });
   };
