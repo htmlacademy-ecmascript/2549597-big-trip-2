@@ -283,8 +283,6 @@ export default class FormEdit extends AbstractStatefulView{
     if (this.#datepickerEnd) {
       this.#datepickerEnd.destroy();
       this.#datepickerEnd = null;
-
-      return;
     }
 
   }
