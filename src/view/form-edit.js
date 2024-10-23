@@ -3,6 +3,8 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {getDate} from '../utils/utils.js';
 import {getOffersByType, getDestination} from '../utils/point.js';
 import {DESTINATIONS} from '../constants.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const getPhoto = (photos) => {
   let markupPhotos = '';
@@ -172,6 +174,8 @@ export default class FormEdit extends AbstractStatefulView{
   #handleSubmit = null;
   #handleFormDelete = null;
   #handleCloseForm = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor({point, destination, offer, onSubmit, onFormDeleteClick, onCloseForm}) {
     super();
@@ -213,6 +217,8 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
+
+    this.#setDatepicker();
   }
 
   #formVehicleTypeHandler = (evt) => {
@@ -263,5 +269,54 @@ export default class FormEdit extends AbstractStatefulView{
   static parseStateToPoint(state) {
     this.point = {...state};
     return this.point;
+  }
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+
+      return;
+    }
+
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+
+  }
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this.updateElement({
+      timeStart: userDate,
+    });
+  };
+
+  #dateEndChangeHandler = ([userDate]) => {
+    this.updateElement({
+      timeEnd: userDate,
+    });
+  };
+
+  #setDatepicker() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dueDate,
+        onChange: this.#dateStartChangeHandler,
+      });
+
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.dueDate,
+        onChange: this.#dateEndChangeHandler,
+      }
+    );
   }
 }
