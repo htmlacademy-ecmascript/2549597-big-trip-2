@@ -19,15 +19,17 @@ export default class PointPresenter {
   #routePoint = null;
   #formEdit = null;
 
+  #clearPoint = null;
   #point = null;
   #mode = Mode.DEFAULT;
 
-  constructor({pointContainer, destinationModel, offerModel, onDataChange, onModeChange}) {
+  constructor({pointContainer, destinationModel, offerModel, onDataChange, onModeChange, onPointClear}) {
     this.#pointContainer = pointContainer;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#clearPoint = onPointClear;
   }
 
   init(point) {
@@ -48,11 +50,10 @@ export default class PointPresenter {
 
     this.#formEdit = new FormEdit({
       point: this.#point,
-      destination: this.#destinationModel.getDestinationById(this.#point.destinationId),
-      offer: this.#offerModel.getOffersByType(this.#point.type),
-      onSubmit: () => {
-        this.#replaceFormToPoint();
-      }
+      destination: this.#destinationModel,
+      offer: this.#offerModel,
+      onSubmit: this.#handleFormSubmit,
+      onFormDeleteClick: this.#handleFormDeleteClick,
     });
 
     if (prevRoutePoint === null || prevFormEdit === null) {
@@ -73,6 +74,19 @@ export default class PointPresenter {
     remove(prevRoutePoint);
   }
 
+  #handleFormDeleteClick = (update) => {
+    // this.#handleDataChange(update);
+    // this.#replaceFormToPoint();
+    this.#replaceFormToPoint();
+    this.#clearPoint(update);
+    document.removeEventListener('keydown', this.#onEditFormKeydown);
+  };
+
+  #handleFormSubmit = (update) => {
+    this.#handleDataChange(update);
+    this.#replaceFormToPoint();
+  };
+
   destroy() {
     remove(this.#formEdit);
     remove(this.#routePoint);
@@ -81,6 +95,7 @@ export default class PointPresenter {
   #onEditFormKeydown = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
+      this.#formEdit.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -104,6 +119,7 @@ export default class PointPresenter {
 
   resetView() {
     if(this.#mode !== Mode.DEFAULT) {
+      this.#formEdit.reset(this.#point);
       this.#replaceFormToPoint();
     }
   }

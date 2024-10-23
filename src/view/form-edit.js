@@ -1,17 +1,28 @@
 
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {getDate} from '../utils/utils.js';
+import {getOffersByType, getDestination} from '../utils/point.js';
+import {DESTINATIONS} from '../constants.js';
 
-const getPhoto = (array) => {
+const getPhoto = (photos) => {
   let markupPhotos = '';
 
-  for (const photo of array) {
+  for (const photo of photos) {
     markupPhotos += `<img class="event__photo" src=${photo} alt="Event photo"></img>`;
   }
 
   return markupPhotos;
 };
 
+const getDestinations = (destinations) => {
+  let markupDestinations = '';
+
+  for (const destination of destinations) {
+    markupDestinations += `<option value="${destination}"></option>`;
+  }
+
+  return markupDestinations;
+};
 const getOffer = (offers) => {
   let markupOffer = '';
 
@@ -29,11 +40,12 @@ const getOffer = (offers) => {
   return markupOffer;
 };
 
-function createFormEditTemplate(point, destination, offer) {
+function createFormEditTemplate(point, destination, offers) {
   const {type, timeStart, timeEnd, price} = point;
-  const {photos, description, townName} = destination;
-  const {offers} = offer;
+  const currentDestination = getDestination(point.destinationId, destination.destination);
+  const {photos, description, townName} = currentDestination;
 
+  const currentOffers = getOffersByType(type, offers.offers);
   const photoArray = getPhoto(photos);
   const dateStart = getDate(timeStart, 'DD/MM/YY HH:mm');
   const dateEnd = getDate(timeEnd, 'DD/MM/YY HH:mm');
@@ -105,9 +117,7 @@ function createFormEditTemplate(point, destination, offer) {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${townName} list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      ${getDestinations(DESTINATIONS)}
                     </datalist>
                   </div>
 
@@ -138,7 +148,7 @@ function createFormEditTemplate(point, destination, offer) {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                      ${getOffer(offers)}
+                      ${getOffer(currentOffers)}
                     </div>
                   </section>
 
@@ -155,28 +165,96 @@ function createFormEditTemplate(point, destination, offer) {
               </form>`);
 }
 
-export default class FormEdit extends AbstractView{
+export default class FormEdit extends AbstractStatefulView{
   #point = null;
   #destination = null;
   #offer = null;
   #handleSubmit = null;
+  #handleFormDelete = null;
 
-  constructor({point, destination, offer, onSubmit}) {
+  constructor({point, destination, offer, onSubmit, onFormDeleteClick}) {
     super();
-    this.#point = point;
+    this._setState(FormEdit.parsePointToState(point));
     this.#destination = destination;
     this.#offer = offer;
     this.#handleSubmit = onSubmit;
-    this.element.addEventListener('submit', this.#submitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#submitHandler);
+    this.#handleFormDelete = onFormDeleteClick;
+
+    this._restoreHandlers();
+  }
+
+  reset(point) {
+    this.updateElement(
+      FormEdit.parsePointToState(point),
+    );
   }
 
   #submitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleSubmit(this.#point);
+    this.#handleSubmit(FormEdit.parseStateToPoint(this._state));
+  };
+
+  #deleteHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormDelete(FormEdit.parseStateToPoint(this._state));
+  };
+
+  _restoreHandlers() {
+    this.element.addEventListener('submit', this.#submitHandler);
+    this.element.addEventListener('reset', this.#deleteHandler);
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', );
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
+  }
+
+  #formVehicleTypeHandler = (evt) => {
+    evt.preventDefault();
+    this.element.querySelector('.event__label').textContent = evt.target.value;
+
+    this.updateElement({
+      ...this._state,
+      type: evt.target.value,
+      offer: [],
+    });
+  };
+
+  #formDestinationHandler = (evt) => {
+    evt.preventDefault();
+
+    const currentDestination = this.#destination.destination.find((destination) => destination.townName === evt.target.value);
+
+    if(!currentDestination) {
+      this.updateElement({
+        ...this._state,
+      });
+
+      return;
+    }
+
+    this.updateElement({
+      ...this._state,
+      destinationId:  currentDestination.id,
+    });
+  };
+
+  #formPriceHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({...this._state.point,
+      price: Number(evt.target.value),
+    });
   };
 
   get template() {
-    return createFormEditTemplate(this.#point, this.#destination, this.#offer);
+    return createFormEditTemplate(this._state, this.#destination, this.#offer);
+  }
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    this.point = {...state};
+    return this.point;
   }
 }
