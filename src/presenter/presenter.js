@@ -108,11 +108,17 @@ export default class Presenter {
       destinationModel: this.#destinationModel,
       offerModel: this.#offerModel,
       onDataChange: this.#handlePointChange,
-      onModeChange: this.#handleModeChange});
+      onModeChange: this.#handleModeChange,
+      onPointClear: this.#clearPoint});
 
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
+
+  #clearPoint = (point) => {
+    const targetPresenter = this.#pointPresenters.get(point.id);
+    targetPresenter.destroy();
+  };
 
   #clearPoints() {
     remove(this.#sortComponent);
