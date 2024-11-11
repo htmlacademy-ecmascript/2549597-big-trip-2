@@ -2,6 +2,7 @@ import FormEdit from '../view/form-edit.js';
 import RoutePoint from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {isEscKey} from '../utils/utils.js';
+import {UserAction, UpdateType} from '../constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -81,13 +82,21 @@ export default class PointPresenter {
   };
 
   #handleFormDeleteClick = (update) => {
-    this.#replaceFormToPoint();
-    this.#clearPoint(update);
+    this.#handleDataChange(
+      UserAction.DELETE_TASK,
+      UpdateType.MINOR,
+      update,
+    );
+
     document.removeEventListener('keydown', this.#onEditFormKeydown);
   };
 
   #handleFormSubmit = (update) => {
-    this.#handleDataChange(update);
+    this.#handleDataChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      update,
+    );
     this.#replaceFormToPoint();
   };
 
@@ -118,7 +127,12 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    // this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   };
 
   resetView() {
