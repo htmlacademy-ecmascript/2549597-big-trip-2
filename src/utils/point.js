@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-const FORMAT_DATE = 'DD/MM/YYYY';
+// const FORMAT_DATE = 'DD/MM/YYYY';
 
 export const isPointPast = (date) =>
   // date && date.format(FORMAT_DATE).isSame(dayjs().format(FORMAT_DATE)) || date.isBefore(dayjs());
