@@ -25,13 +25,16 @@ const getDestinations = (destinations) => {
 
   return markupDestinations;
 };
-const getOffer = (offers) => {
+
+const getOffer = (offers, point) => {
   let markupOffer = '';
+  const isChecked = (offer) => point.offers && point.offers.includes(offer.id) ? 'checked' : '';
 
   for (const offer of offers) {
     markupOffer += `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-                        <label class="event__offer-label" for="event-offer-luggage-1">
+                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox"
+                        name="event-offer-${offer.id}" data-id=${offer.id} ${isChecked(offer.id)}>
+                        <label class="event__offer-label" for="event-offer-${offer.id}">
                           <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
                           <span class="event__offer-price">${offer.price}</span>
@@ -45,7 +48,6 @@ const getOffer = (offers) => {
 function createFormEditTemplate(point, destination, offers) {
   const {type, timeStart, timeEnd, price} = point;
   let currentDestination;
-  // let currentOffers = '';
 
   if (point.destinationId === undefined) {
     currentDestination = '';
@@ -54,14 +56,9 @@ function createFormEditTemplate(point, destination, offers) {
   }
 
   const {photos, description, townName} = currentDestination || {};
-  // const photos = currentDestination.photos || '';
-  // const description = currentDestination.description || '';
-  // const townName = currentDestination.townName || '';
-
-  // if (offers) {
   const currentOffers = getOffersByType(type, offers.offers);
-  // }
-  const isChecked = (currentType) => type === currentType;
+
+  const isChecked = (currentType) => type === currentType ? 'checked' : '';
 
   const photoArray = photos ? getPhoto(photos) : '';
   const dateStart = timeStart ? getDate(timeStart, 'DD/MM/YY HH:mm') : '';
@@ -165,7 +162,7 @@ function createFormEditTemplate(point, destination, offers) {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                      ${getOffer(currentOffers)}
+                      ${getOffer(currentOffers, point)}
                     </div>
                   </section>
 
@@ -232,6 +229,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('click', this.#editOffersHandler);
 
     this.#setDatepicker();
   }
@@ -243,7 +241,16 @@ export default class FormEdit extends AbstractStatefulView{
     this.updateElement({
       ...this._state,
       type: evt.target.value,
-      offer: [],
+      offers: [],
+    });
+  };
+
+  #editOffersHandler = (evt) => {
+    evt.preventDefault();
+    const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+
+    this._setState({
+      offers: checkedBoxes.map((element) => element.dataset.id),
     });
   };
 
