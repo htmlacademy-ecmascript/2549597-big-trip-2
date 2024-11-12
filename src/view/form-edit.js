@@ -45,7 +45,7 @@ const getOffer = (offers) => {
 function createFormEditTemplate(point, destination, offers) {
   const {type, timeStart, timeEnd, price} = point;
   let currentDestination;
-  let currentOffers = '';
+  // let currentOffers = '';
 
   if (point.destinationId === undefined) {
     currentDestination = '';
@@ -58,9 +58,9 @@ function createFormEditTemplate(point, destination, offers) {
   const description = currentDestination.description || '';
   const townName = currentDestination.townName || '';
 
-  if (offers) {
-    currentOffers = getOffersByType(type, offers.offers);
-  }
+  // if (offers) {
+  const currentOffers = getOffersByType(type, offers.offers);
+  // }
 
 
   const photoArray = photos ? getPhoto(photos) : '';

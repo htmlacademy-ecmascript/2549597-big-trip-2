@@ -10,12 +10,14 @@ export default class NewPointPresenter {
   #handleDestroy = null;
   #pointEditComponent = null;
   #destinationModel = null;
+  #offerModel = null;
 
-  constructor({pointListContainer, onDataChange, onDestroy, destinationModel}) {
+  constructor({pointListContainer, onDataChange, onDestroy, destinationModel, offerModel}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
     this.#destinationModel = destinationModel;
+    this.#offerModel = offerModel;
   }
 
   init() {
@@ -29,7 +31,7 @@ export default class NewPointPresenter {
         price: 0,
       },
       destination: this.#destinationModel,
-      offer: '',
+      offer: this.#offerModel,
       onSubmit: this.#handleFormSubmit,
       onFormDeleteClick: this.#handleDeleteClick,
       onCloseForm: this.#handleDeleteClick,

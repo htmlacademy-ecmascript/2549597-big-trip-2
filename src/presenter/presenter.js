@@ -34,6 +34,7 @@ export default class Presenter {
       onDataChange: this.#handleViewAction,
       onDestroy: onNewPointDestroy,
       destinationModel: destinationModel,
+      offerModel: offerModel,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
