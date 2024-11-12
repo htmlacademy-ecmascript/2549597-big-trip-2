@@ -28,7 +28,7 @@ const getDestinations = (destinations) => {
 
 const getOffer = (offers, point) => {
   let markupOffer = '';
-  const isChecked = (offer) => point.offers && point.offers.includes(offer.id) ? 'checked' : '';
+  const isChecked = (offerId) => point.offers && point.offers.includes(String(offerId)) ? 'checked' : '';
 
   for (const offer of offers) {
     markupOffer += `<div class="event__offer-selector">
@@ -229,7 +229,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('click', this.#editOffersHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#editOffersHandler);
 
     this.#setDatepicker();
   }
