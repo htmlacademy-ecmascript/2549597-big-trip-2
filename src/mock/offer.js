@@ -6,10 +6,12 @@ const OFFERS = [
       {
         title:'Ride on taxi',
         price: 100,
+        id: 1,
       },
       {
         title:'Ride on next town',
         price: 2000,
+        id: 2,
       }
     ]
   },
@@ -20,10 +22,12 @@ const OFFERS = [
       {
         title:'Ride on bus',
         price: 30,
+        id: 3,
       },
       {
         title:'Ride on next town',
         price: 500,
+        id: 4,
       }
     ]
   },
@@ -34,14 +38,17 @@ const OFFERS = [
       {
         title:'Ride on train in next station',
         price: 200,
+        id: 5,
       },
       {
         title:'Ride on train on next town',
         price: 2500,
+        id: 6,
       },
       {
         title:'Eat on train',
         price: 220,
+        id: 7,
       }
     ]
   },
@@ -52,6 +59,7 @@ const OFFERS = [
       {
         title:'Cruise',
         price: 4750,
+        id: 8,
       },
     ]
   },
@@ -62,10 +70,12 @@ const OFFERS = [
       {
         title:'With conditioner',
         price: 80,
+        id: 9,
       },
       {
         title:'New car',
         price: 500,
+        id: 10,
       }
     ]
   },
@@ -76,14 +86,17 @@ const OFFERS = [
       {
         title:'helicopter',
         price: 3000,
+        id: 11,
       },
       {
         title:'Aeroplan',
         price: 500,
+        id: 12,
       },
       {
         title:'Baloon',
         price: 1500,
+        id: 13,
       }
     ]
   },
@@ -94,6 +107,7 @@ const OFFERS = [
       {
         title:'Add breakfast',
         price: 80,
+        id: 14,
       },
     ]
   },
@@ -104,10 +118,12 @@ const OFFERS = [
       {
         title:'upgrade class',
         price: 180,
+        id: 15,
       },
       {
         title:'add luggage',
         price: 500,
+        id: 16,
       }
     ]
   },
@@ -118,10 +134,12 @@ const OFFERS = [
       {
         title:'live music',
         price: 200,
+        id: 17,
       },
       {
         title:'vip area',
         price: 500,
+        id: 18,
       }
     ]
   },

@@ -25,13 +25,16 @@ const getDestinations = (destinations) => {
 
   return markupDestinations;
 };
-const getOffer = (offers) => {
+
+const getOffer = (offers, point) => {
   let markupOffer = '';
+  const isChecked = (offerId) => point.offers && point.offers.includes(String(offerId)) ? 'checked' : '';
 
   for (const offer of offers) {
     markupOffer += `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-                        <label class="event__offer-label" for="event-offer-luggage-1">
+                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox"
+                        name="event-offer-${offer.id}" data-id=${offer.id} ${isChecked(offer.id)}>
+                        <label class="event__offer-label" for="event-offer-${offer.id}">
                           <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
                           <span class="event__offer-price">${offer.price}</span>
@@ -44,13 +47,22 @@ const getOffer = (offers) => {
 
 function createFormEditTemplate(point, destination, offers) {
   const {type, timeStart, timeEnd, price} = point;
-  const currentDestination = getDestination(point.destinationId, destination.destination);
-  const {photos, description, townName} = currentDestination;
+  let currentDestination;
 
+  if (point.destinationId === undefined) {
+    currentDestination = '';
+  } else {
+    currentDestination = getDestination(point.destinationId, destination.destination);
+  }
+
+  const {photos, description, townName} = currentDestination || {};
   const currentOffers = getOffersByType(type, offers.offers);
-  const photoArray = getPhoto(photos);
-  const dateStart = getDate(timeStart, 'DD/MM/YY HH:mm');
-  const dateEnd = getDate(timeEnd, 'DD/MM/YY HH:mm');
+
+  const isChecked = (currentType) => type === currentType ? 'checked' : '';
+
+  const photoArray = photos ? getPhoto(photos) : '';
+  const dateStart = timeStart ? getDate(timeStart, 'DD/MM/YY HH:mm') : '';
+  const dateEnd = timeEnd ? getDate(timeEnd, 'DD/MM/YY HH:mm') : '';
 
   return (`<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -66,47 +78,47 @@ function createFormEditTemplate(point, destination, offers) {
                         <legend class="visually-hidden">Event type</legend>
 
                         <div class="event__type-item">
-                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${isChecked('taxi')}>
                           <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${isChecked('bus')}>
                           <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${isChecked('train')}>
                           <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${isChecked('ship')}>
                           <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${isChecked('drive')}>
                           <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${isChecked('flight')}>
                           <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${isChecked('check-in')}>
                           <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${isChecked('sightseeing')}>
                           <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
                         </div>
 
                         <div class="event__type-item">
-                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${isChecked('restaurant')}>
                           <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
                         </div>
                       </fieldset>
@@ -117,7 +129,7 @@ function createFormEditTemplate(point, destination, offers) {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${townName} list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"  value="${townName || ''}"  list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${getDestinations(DESTINATIONS)}
                     </datalist>
@@ -150,13 +162,13 @@ function createFormEditTemplate(point, destination, offers) {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                      ${getOffer(currentOffers)}
+                      ${getOffer(currentOffers, point)}
                     </div>
                   </section>
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description}</p>
+                    <p class="event__destination-description">${description || ''}</p>
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
                         ${photoArray}
@@ -217,6 +229,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#editOffersHandler);
 
     this.#setDatepicker();
   }
@@ -228,7 +241,16 @@ export default class FormEdit extends AbstractStatefulView{
     this.updateElement({
       ...this._state,
       type: evt.target.value,
-      offer: [],
+      offers: [],
+    });
+  };
+
+  #editOffersHandler = (evt) => {
+    evt.preventDefault();
+    const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+
+    this._setState({
+      offers: checkedBoxes.map((element) => element.dataset.id),
     });
   };
 

@@ -17,7 +17,7 @@ const getOffersMarkup = (offers) => {
 
 function createRoutePointTemplate(point, destination, offer) {
   const {type, timeStart, timeEnd, isFavorite, price} = point;
-  const {townName} = destination;
+  const {townName} = destination || {};
   const {offers} = offer;
 
   const favorite = isFavorite ? 'event__favorite-btn--active' : '';

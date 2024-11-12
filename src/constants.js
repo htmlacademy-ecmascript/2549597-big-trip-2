@@ -21,20 +21,20 @@ export const MAX_PRICE = 10000;
 export const MAX_POINTS = 6;
 export const TIME = {
   start: [
-    '2020-04-02 02:17',
-    '2020-04-04 03:05',
+    '2025-04-02 02:17',
+    '2025-04-04 03:05',
     '2020-02-06 03:22',
-    '2020-04-08 11:56',
-    '2020-03-12 22:22',
-    '2020-03-12 21:00'
+    '2025-04-08 11:56',
+    '2024-11-05 22:22',
+    '2024-03-12 21:00'
   ],
   end: [
-    '2020-04-02 02:19',
-    '2020-04-04 03:17',
+    '2025-04-02 02:19',
+    '2025-04-04 03:17',
     '2020-02-08 04:17',
-    '2020-04-08 12:00',
-    '2020-03-14 22:30',
-    '2020-04-12 21:05',
+    '2025-04-08 12:00',
+    '2024-11-14 22:30',
+    '2024-04-12 21:05',
   ],
 };
 export const DESCRIPTION = [
@@ -62,9 +62,15 @@ export const SortTypes = {
   DAY: 'day',
   TIME: 'time',
 };
-export const EmptyListText = {
-  EVERTHING: 'Click New Event to create your first point',
-  PAST: 'There are no past events now',
-  PRESENT: 'There are no present events now',
-  FUTURE: 'There are no future events now',
+
+export const UserAction = {
+  UPDATE_TASK: 'UPDATE_TASK',
+  ADD_TASK: 'ADD_TASK',
+  DELETE_TASK: 'DELETE_TASK',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };
