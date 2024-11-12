@@ -45,21 +45,23 @@ const getOffer = (offers) => {
 function createFormEditTemplate(point, destination, offers) {
   const {type, timeStart, timeEnd, price} = point;
   let currentDestination;
-  let currentOffers;
+  let currentOffers = '';
 
-  if (destination === null) {
+  if (point.destinationId === undefined) {
     currentDestination = '';
   } else {
     currentDestination = getDestination(point.destinationId, destination.destination);
   }
 
-  const {photos, description, townName} = currentDestination;
+  // const {photos, description, townName} = currentDestination || ;
+  const photos = currentDestination.photos || '';
+  const description = currentDestination.description || '';
+  const townName = currentDestination.townName || '';
 
-  if (offers === null) {
-    currentOffers = '';
-  } else {
+  if (offers) {
     currentOffers = getOffersByType(type, offers.offers);
   }
+
 
   const photoArray = photos ? getPhoto(photos) : '';
   const dateStart = timeStart ? getDate(timeStart, 'DD/MM/YY HH:mm') : '';
@@ -130,7 +132,7 @@ function createFormEditTemplate(point, destination, offers) {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1" value=${townName ?? ''}  >
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination"  value="${townName}"  list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${getDestinations(DESTINATIONS)}
                     </datalist>
@@ -169,7 +171,7 @@ function createFormEditTemplate(point, destination, offers) {
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description ?? ''}</p>
+                    <p class="event__destination-description">${description}</p>
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
                         ${photoArray}

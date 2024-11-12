@@ -32,7 +32,8 @@ export default class Presenter {
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#container,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy
+      onDestroy: onNewPointDestroy,
+      destinationModel: destinationModel,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);

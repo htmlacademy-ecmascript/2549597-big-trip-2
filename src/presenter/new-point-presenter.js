@@ -9,11 +9,13 @@ export default class NewPointPresenter {
   #handleDataChange = null;
   #handleDestroy = null;
   #pointEditComponent = null;
+  #destinationModel = null;
 
-  constructor({pointListContainer, onDataChange, onDestroy}) {
+  constructor({pointListContainer, onDataChange, onDestroy, destinationModel}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
+    this.#destinationModel = destinationModel;
   }
 
   init() {
@@ -26,10 +28,11 @@ export default class NewPointPresenter {
         type: 'flight',
         price: 0,
       },
-      destination: null,
-      offer: null,
+      destination: this.#destinationModel,
+      offer: '',
       onSubmit: this.#handleFormSubmit,
       onFormDeleteClick: this.#handleDeleteClick,
+      onCloseForm: this.#handleDeleteClick,
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
@@ -43,7 +46,9 @@ export default class NewPointPresenter {
     }
 
     this.#handleDestroy();
+
     remove(this.#pointEditComponent);
+
     this.#pointEditComponent = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
