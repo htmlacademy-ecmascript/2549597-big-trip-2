@@ -56,7 +56,7 @@ function createFormEditTemplate(point, destination, offers) {
   }
 
   const {photos, description, townName} = currentDestination || {};
-  const currentOffers = getOffersByType(type, offers.offers) || {};
+  const currentOffers = getOffersByType(type, offers.offers) || [];
 
   const isChecked = (currentType) => type === currentType ? 'checked' : '';
 

@@ -1,18 +1,10 @@
 import dayjs from 'dayjs';
 
-// const FORMAT_DATE = 'DD/MM/YYYY';
+export const isPointPast = (date) => date && dayjs().isAfter(date);
 
-export const isPointPast = (date) =>
-  // date && date.format(FORMAT_DATE).isSame(dayjs().format(FORMAT_DATE)) || date.isBefore(dayjs());
-  date && dayjs().isBefore(date);
+export const isPointPresent = (dateStart, dateEnd) => dateStart && dateEnd && dayjs().isAfter(dateStart) && dayjs().isBefore(dateEnd);
 
-export const isPointPresent = (dateStart, dateEnd) =>
-  // dateStart && dateEnd && dateStart.format(FORMAT_DATE).isSame(dayjs().format(FORMAT_DATE)) && dateEnd.format(FORMAT_DATE).isSame(dayjs().format(FORMAT_DATE));
-  dateStart && dateEnd && dayjs().isAfter(dateStart) && dayjs().isBefore(dateEnd);
-
-export const isPointFuture = (date) =>
-  // date && dayjs().format(FORMAT_DATE).isBefore(date.format(FORMAT_DATE));
-  dayjs().isBefore(date);
+export const isPointFuture = (date) => dayjs().isBefore(date);
 
 export const sortPointsByDay = (dateFrom, dateTo) => dayjs(dateFrom.timeStart).diff(dayjs(dateTo.timeStart));
 
@@ -20,6 +12,6 @@ export const sortPointsByTime = (dateFrom, dateTo) => dayjs(dateTo.timeEnd).diff
 
 export const sortPointsByPrice = (dateFrom, dateTo) => dateTo.price - dateFrom.price;
 
-export const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type).offers;
+export const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type)?.offers || [];
 
 export const getDestination = (id, destinations) => destinations.find((destination) => destination.id === id);

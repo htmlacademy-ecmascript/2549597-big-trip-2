@@ -41,6 +41,8 @@ export default class Presenter {
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#destinationModel.addObserver(this.#handleModelEvent);
+    this.#offerModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -86,15 +88,16 @@ export default class Presenter {
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
-        this.#renderPoints();
+        this.#renderBoard();
 
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetSortType: true});
-        this.#renderPoints();
+        this.#renderBoard();
 
         break;
       case UpdateType.INIT:
+        this.#clearBoard();
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderBoard();
@@ -159,6 +162,9 @@ export default class Presenter {
   }
 
   #renderPoints() {
+    if(!this.#offerModel.offers.length || !this.#destinationModel.destination.length) {
+      return;
+    }
     this.#renderSorting();
 
     this.points.forEach((point) => {

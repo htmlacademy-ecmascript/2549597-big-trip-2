@@ -22,23 +22,4 @@ export default class OfferApiService extends ApiService {
 
     return parsedResponse;
   }
-
-  // #adaptToServer(point) {
-  //   const adaptedPoint = {
-  //     ...point,
-  //     'base_price': point.price,
-  //     'date_from': point.timeStart instanceof Date ? point.timeStart.toISOString() : null,
-  //     'date_to': point.timeEnd instanceof Date ? point.timeEnd.toISOString() : null,
-  //     'is_favorite': point.isFavorite,
-  //     'destination': point.destinationId,
-  //   };
-
-  //   delete adaptedPoint.price;
-  //   delete adaptedPoint.timeStart;
-  //   delete adaptedPoint.timeEnd;
-  //   delete adaptedPoint.isFavorite;
-  //   delete adaptedPoint.destinationId;
-
-  //   return adaptedPoint;
-  // }
 }

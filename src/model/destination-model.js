@@ -17,12 +17,12 @@ export default class DestinationModel extends Observable{
   async init() {
     try {
       const destination = await this.#destinationApiService.destinations;
+
       this.#destinationCards = destination.map(this.#adaptToClient);
+      this._notify(UpdateType.INIT);
     } catch(err) {
       this.#destinationCards = [];
     }
-
-    this._notify(UpdateType.INIT);
   }
 
   #adaptToClient(destination) {

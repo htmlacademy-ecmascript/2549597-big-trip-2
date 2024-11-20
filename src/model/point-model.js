@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {UpdateType} from '../constants.js';
 import Observable from '../framework/observable.js';
 export default class PointModel extends Observable{
@@ -27,8 +28,8 @@ export default class PointModel extends Observable{
     const adaptedPoint = {
       ...point,
       price: point['base_price'],
-      timeStart: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      timeEnd: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      timeStart: point['date_from'] !== null ? dayjs(point['date_from']).format('MM/DD/YY HH:mm') : point['date_from'],
+      timeEnd: point['date_to'] !== null ? dayjs(point['date_to']).format('MM/DD/YY HH:mm') : point['date_to'],
       isFavorite: point['is_favorite'],
       destinationId: point['destination'],
     };

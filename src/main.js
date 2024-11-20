@@ -39,9 +39,10 @@ function handleNewPointButtonClick() {
 
 filterPresenter.init();
 presenter.init();
+offerModel.init();
+destinationModel.init();
 pointModel.init()
   .finally(() => {
     render(newPointButtonComponent, newBtnContainer, 'afterend');
   });
-offerModel.init();//
-destinationModel.init();//
+
