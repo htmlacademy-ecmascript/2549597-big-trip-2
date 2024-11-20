@@ -10,7 +10,7 @@ const getPhoto = (photos) => {
   let markupPhotos = '';
 
   for (const photo of photos) {
-    markupPhotos += `<img class="event__photo" src=${photo} alt="Event photo"></img>`;
+    markupPhotos += `<img class="event__photo" src=${photo.src} alt="${photo.description}"></img>`;
   }
 
   return markupPhotos;
@@ -56,7 +56,7 @@ function createFormEditTemplate(point, destination, offers) {
   }
 
   const {photos, description, townName} = currentDestination || {};
-  const currentOffers = getOffersByType(type, offers.offers);
+  const currentOffers = getOffersByType(type, offers.offers) || {};
 
   const isChecked = (currentType) => type === currentType ? 'checked' : '';
 

@@ -6,15 +6,21 @@ import {render} from './framework/render.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
+import PointApiService from './points-api-service.js';
+import OfferApiService from './offers-api-service.js';
+import DestinationApiService from './destinations-api-service.js';
+
+const AUTHORIZATION = 'Basic fe2mg530wpear2kltfd';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const siteHeader = document.querySelector('.page-header');
 const newBtnContainer = document.querySelector('.trip-main__trip-controls');
 const siteFilterContainer = siteHeader.querySelector('.trip-controls__filters');
 const siteMain = document.querySelector('.page-body__page-main');
 const siteSortingContainer = siteMain.querySelector('.trip-events');
-const pointModel = new PointModel();
-const destinationModel = new DestinationModel();
-const offerModel = new OfferModel();
+const pointModel = new PointModel({pointApiService: new PointApiService(END_POINT, AUTHORIZATION)});
+const destinationModel = new DestinationModel({destinationApiService: new DestinationApiService(END_POINT, AUTHORIZATION)});
+const offerModel = new OfferModel({offersApiService: new OfferApiService(END_POINT, AUTHORIZATION)});
 const filterModel = new FilterModel();
 const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose});//, onNewPointDestroy: handleNewPointFormClose});
 const filterPresenter = new FilterPresenter({filterContainer: siteFilterContainer, filterModel, pointModel});
@@ -31,7 +37,11 @@ function handleNewPointButtonClick() {
   newPointButtonComponent.element.disabled = true;
 }
 
-render(newPointButtonComponent, newBtnContainer, 'afterend');
-
 filterPresenter.init();
 presenter.init();
+pointModel.init()
+  .finally(() => {
+    render(newPointButtonComponent, newBtnContainer, 'afterend');
+  });
+offerModel.init();//
+destinationModel.init();//

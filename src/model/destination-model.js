@@ -1,13 +1,45 @@
-import {destinationCards} from '../mock/destination.js';
+import {UpdateType} from '../constants.js';
+import Observable from '../framework/observable.js';
 
-export default class DestinationModel {
-  #destinationCards = destinationCards;
+export default class DestinationModel extends Observable{
+  #destinationCards = [];
+  #destinationApiService = null;
+
+  constructor ({destinationApiService}) {
+    super();
+    this.#destinationApiService = destinationApiService;
+  }
 
   get destination() {
     return this.#destinationCards;
   }
 
+  async init() {
+    try {
+      const destination = await this.#destinationApiService.destinations;
+      this.#destinationCards = destination.map(this.#adaptToClient);
+    } catch(err) {
+      this.#destinationCards = [];
+    }
+
+    this._notify(UpdateType.INIT);
+  }
+
+  #adaptToClient(destination) {
+    const adaptedPoint = {
+      ...destination,
+      photos: destination['pictures'],
+      townName: destination['name'],
+    };
+
+    delete adaptedPoint['name'];
+    delete adaptedPoint['pictures'];
+
+    return adaptedPoint;
+  }
+
+
   getDestinationById(id) {
-    return destinationCards.find((destination) => destination.id === id);
+    return this.#destinationCards.find((destination) => destination.id === id);
   }
 }
