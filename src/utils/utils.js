@@ -28,9 +28,6 @@ export const isEscKey = (evt) => evt.key === 'Escape';
 
 export const convertFirstLetter = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
-// export const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
-
-
 export const getConvertedTime = ({days, hours, minutes}) => {
   const formattedDays = days ? `${checkNumberMoreNine(days)}${days}D ` : '';
   const formattedHours = hours ? `${checkNumberMoreNine(hours)}${hours}H ` : '';

@@ -1,6 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {convertFirstLetter} from '../utils/utils.js';
-// import {FilterType} from '../constants.js';
 
 function createFilterItemTemplate(filter, currentFilterType) {
   return (`<div class="trip-filters__filter">

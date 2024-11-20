@@ -18,7 +18,7 @@ const getOffersMarkup = (offers) => {
 function createRoutePointTemplate(point, destination, offer) {
   const {type, timeStart, timeEnd, isFavorite, price} = point;
   const {townName} = destination || {};
-  const {offers} = offer;
+  const {offers} = offer || {};
 
   const favorite = isFavorite ? 'event__favorite-btn--active' : '';
   const date = getDate(timeStart, 'MMM D');
@@ -50,7 +50,7 @@ function createRoutePointTemplate(point, destination, offer) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  ${getOffersMarkup(offers)}
+                  ${offer ? getOffersMarkup(offers) : ''}
                 </ul>
                 <button class="event__favorite-btn ${favorite}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
