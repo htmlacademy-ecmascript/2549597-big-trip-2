@@ -17,10 +17,14 @@ const getOffersMarkup = (offers) => {
 
 const getCurrentOffers = (offers, point) => {
   const currentOffers = [];
-  const isAvailabilityOffer = (offer) => point.offers && point.offers.includes(String(offer.id)) ? currentOffers.push(offer) : '';
+  const getAvailabilityOffer = (offer) => {
+    if (point.offers && point.offers.includes(String(offer.id))) {
+      currentOffers.push(offer);
+    }
+  };
 
   for (const offer of offers) {
-    isAvailabilityOffer(offer);
+    getAvailabilityOffer(offer);
   }
 
   return currentOffers;
