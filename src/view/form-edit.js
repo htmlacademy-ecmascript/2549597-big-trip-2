@@ -55,7 +55,7 @@ const getOffer = (offers, point, isDisabled) => {
 };
 
 function createFormEditTemplate(point, destination, offers) {
-  const {type, timeStart, timeEnd, price, isDisabled} = point;
+  const {type, timeStart, timeEnd, price, isDisabled, isSaving, isDeleting} = point;
   let currentDestination;
 
   if (point.destinationId === undefined) {
@@ -160,8 +160,8 @@ function createFormEditTemplate(point, destination, offers) {
                     <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price} ${isDisabled ? 'disabled' : ''}>
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
