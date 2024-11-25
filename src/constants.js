@@ -9,14 +9,14 @@ export const ROUTE_TYPES = [
   'sightseeing',
   'restaurant'
 ];
-export const DESTINATIONS = [
-  'Amsterdam',
-  'Chamonix',
-  'Geneva',
-  'Berlin',
-  'Tokio',
-  'France',
-];
+// export const DESTINATIONS = [
+//   'Amsterdam',
+//   'Chamonix',
+//   'Geneva',
+//   'Berlin',
+//   'Tokio',
+//   'France',
+// ];
 export const MAX_PRICE = 10000;
 export const MAX_POINTS = 6;
 export const TIME = {

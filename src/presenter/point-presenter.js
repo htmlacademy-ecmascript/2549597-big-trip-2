@@ -69,11 +69,47 @@ export default class PointPresenter {
     }
 
     if(this.#mode === Mode.EDITING) {
-      replace(this.#formEdit, prevFormEdit);
+      replace(this.#routePoint, prevFormEdit);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevFormEdit);
     remove(prevRoutePoint);
+  }
+
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#formEdit.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#formEdit.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#routePoint.shake();
+
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#formEdit.updateElement({
+        isDisabled: false,
+        isSaving: false,
+      });
+    };
+
+    this.#formEdit.shake(resetFormState);
   }
 
   #handleCloseForm = (point) => {
@@ -97,7 +133,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       update,
     );
-    this.#replaceFormToPoint();
   };
 
   destroy() {
