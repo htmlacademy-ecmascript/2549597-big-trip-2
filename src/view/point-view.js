@@ -15,20 +15,7 @@ const getOffersMarkup = (offers) => {
   return markup;
 };
 
-const getCurrentOffers = (offers, point) => {
-  const currentOffers = [];
-  const getAvailabilityOffer = (offer) => {
-    if (point.offers && point.offers.includes(String(offer.id))) {
-      currentOffers.push(offer);
-    }
-  };
-
-  for (const offer of offers) {
-    getAvailabilityOffer(offer);
-  }
-
-  return currentOffers;
-};
+const getCurrentOffers = (offers, point) => offers.filter((offer) => point.offers?.includes(offer.id));
 
 function createRoutePointTemplate(point, destination, offer) {
   const {type, timeStart, timeEnd, isFavorite, price} = point;
