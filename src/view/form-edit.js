@@ -5,15 +5,7 @@ import {getOffersByType, getDestination} from '../utils/point.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const getAllDestination = (destinations) => {
-  const currentAllDestinations = [];
-
-  destinations.forEach((destination) => {
-    currentAllDestinations.push(destination.townName);
-  });
-
-  return currentAllDestinations;
-};
+const getAllDestination = (destinations) => destinations.map((destination) => destination.townName);
 
 const getPhoto = (photos) => {
   let markupPhotos = '';
