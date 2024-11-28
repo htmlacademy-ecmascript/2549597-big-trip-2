@@ -15,3 +15,17 @@ export const sortPointsByPrice = (dateFrom, dateTo) => dateTo.price - dateFrom.p
 export const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type)?.offers || [];
 
 export const getDestination = (id, destinations) => destinations.find((destination) => destination.id === id);
+
+export const getPriceWithoutOffers = (points) => points.reduce((sum, price) => sum + price.price, 0);
+
+export const getPontOffersPrice = (point, allOffers) => {
+  let totalSum = 0;
+  const pointOffers = getOffersByType(point.type, allOffers);
+  const includesPointOffers = pointOffers.filter((offers) => point.offers.includes(offers.id));
+
+  includesPointOffers.forEach((offer) => {
+    totalSum += offer.price;
+  });
+
+  return totalSum;
+};

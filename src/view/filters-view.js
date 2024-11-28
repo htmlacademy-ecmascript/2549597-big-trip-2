@@ -2,8 +2,10 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {convertFirstLetter} from '../utils/utils.js';
 
 function createFilterItemTemplate(filter, currentFilterType) {
+  const isDisabled = filter.count ? '' : 'disabled';
+
   return (`<div class="trip-filters__filter">
-            <input id="filter-${filter.type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.type}" ${(currentFilterType === filter.type) ? 'checked' : ''}>
+            <input id="filter-${filter.type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.type}" ${(currentFilterType === filter.type) ? 'checked' : ''} ${isDisabled}>
             <label class="trip-filters__filter-label" for="filter-${filter.type}">${convertFirstLetter(filter.type)}</label>
           </div>`);
 }

@@ -1,14 +1,16 @@
 import RouteListPoints from '../view/points-list-view.js';
-import {render, RenderPosition, remove} from '../framework/render.js';
+import {render, RenderPosition, remove, replace} from '../framework/render.js';
 import EmptyList from '../view/empty-list.js';
 import PointPresenter from '../presenter/point-presenter.js';
 import NewPointPresenter from '../presenter/new-point-presenter.js';
 import {filter} from '../utils/filter.js';
 import Sorting from '../view/sorting-view.js';
 import {SortTypes, UserAction, UpdateType, FilterType} from '../constants.js';
-import {sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/point.js';
+import {getPriceWithoutOffers, getPontOffersPrice, sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/point.js';
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import TotalPrice from '../view/total-price-view.js';
+import Destination from '../view/destination-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -27,19 +29,26 @@ export default class Presenter {
   #newPointPresenter = null;
   #currentSortType = SortTypes.DAY;
   #pointPresenters = new Map();
-  #filterType = FilterType.EVERTHING;
+  #filterType = FilterType.EVERYTHING;
   #isLoading = true;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy}) {
+  #destinationContainer = null;
+  #priceContainer = null;
+  #totalPriceComponent = null;
+  #destinationComponent = null;
+
+  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, priceContainer, destinationContainer}) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
+    this.#priceContainer = priceContainer;
+    this.#destinationContainer = destinationContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#container,
@@ -147,7 +156,7 @@ export default class Presenter {
 
   createPoint() {
     this.#currentSortType = SortTypes.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERTHING);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
   }
 
@@ -175,7 +184,52 @@ export default class Presenter {
     }
 
     this.#renderPoints();
+    this.#renderTotalPrice();
+    this.#renderDestination();
   }
+
+  #renderDestination = () => {
+    const prevDestinationComponent = this.#destinationComponent;
+
+    this.#destinationComponent = new Destination({
+      points: this.#pointModel.points,
+      destinations: this.#destinationModel.destination,
+    });
+
+    if (prevDestinationComponent === null) {
+      render(this.#destinationComponent, this.#destinationContainer, 'afterbegin');
+
+      return;
+    }
+
+    replace(this.#destinationComponent, prevDestinationComponent);
+    remove(prevDestinationComponent);
+  };
+
+  #renderTotalPrice = () => {
+    const prevTotalPriceComponent = this.#totalPriceComponent;
+
+    const priceWithoutOffers = getPriceWithoutOffers(this.#pointModel.points);
+
+    let totalSum = priceWithoutOffers;
+    this.#pointModel.points.forEach((point) => {
+
+      totalSum += getPontOffersPrice(point, this.#offerModel.offers);
+    });
+
+    this.#totalPriceComponent = new TotalPrice({
+      totalPrice: totalSum,
+    });
+
+    if (prevTotalPriceComponent === null) {
+      render(this.#totalPriceComponent, this.#priceContainer, 'afterend');
+
+      return;
+    }
+
+    replace(this.#totalPriceComponent, prevTotalPriceComponent);
+    remove(prevTotalPriceComponent);
+  };
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
@@ -200,6 +254,7 @@ export default class Presenter {
     if(!this.#offerModel.offers.length || !this.#destinationModel.destination.length) {
       return;
     }
+
     this.#renderSorting();
 
     this.points.forEach((point) => {

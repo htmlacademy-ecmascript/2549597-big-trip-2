@@ -1,7 +1,7 @@
 export const FAVORITE = [true, false];
 export const FilterType = {
   PAST: 'past',
-  EVERTHING: 'everthing',
+  EVERYTHING: 'everything',
   PRESENT: 'present',
   FUTURE: 'future',
 };
