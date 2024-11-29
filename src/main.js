@@ -14,7 +14,7 @@ const AUTHORIZATION = 'Basic fe2mg530wpear2kltfd';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const siteHeader = document.querySelector('.page-header');
-const destinationContainer = document.querySelector('.trip-main');
+const tripInfoContainer = document.querySelector('.trip-main');
 const newBtnContainer = document.querySelector('.trip-main__trip-controls');
 const siteFilterContainer = siteHeader.querySelector('.trip-controls__filters');
 const siteMain = document.querySelector('.page-body__page-main');
@@ -23,7 +23,7 @@ const pointModel = new PointModel({pointApiService: new PointApiService(END_POIN
 const destinationModel = new DestinationModel({destinationApiService: new DestinationApiService(END_POINT, AUTHORIZATION)});
 const offerModel = new OfferModel({offersApiService: new OfferApiService(END_POINT, AUTHORIZATION)});
 const filterModel = new FilterModel();
-const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, priceContainer: newBtnContainer, destinationContainer: destinationContainer, dateContainer: destinationContainer});
+const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, tripInfoContainer: tripInfoContainer});
 const filterPresenter = new FilterPresenter({filterContainer: siteFilterContainer, filterModel, pointModel});
 
 const newPointButtonComponent = new NewPointButtonView({
