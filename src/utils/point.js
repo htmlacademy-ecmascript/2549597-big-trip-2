@@ -19,15 +19,10 @@ export const getDestination = (id, destinations) => destinations.find((destinati
 export const getPriceWithoutOffers = (points) => points.reduce((sum, price) => sum + price.price, 0);
 
 export const getPontOffersPrice = (point, allOffers) => {
-  let totalSum = 0;
   const pointOffers = getOffersByType(point.type, allOffers);
   const includesPointOffers = pointOffers.filter((offers) => point.offers.includes(offers.id));
 
-  includesPointOffers.forEach((offer) => {
-    totalSum += offer.price;
-  });
-
-  return totalSum;
+  return includesPointOffers.reduce((sum, currentPoint) => sum + currentPoint.price, 0);
 };
 
 export const getCurrentDate = (date) => dayjs(date).format('MMM DD');

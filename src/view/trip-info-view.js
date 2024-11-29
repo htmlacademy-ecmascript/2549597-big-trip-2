@@ -23,16 +23,7 @@ const getMarkupDestination = (destinations, points) => {
   }
 };
 
-const getPrice = (points, offers) => {
-  const priceWithoutOffers = getPriceWithoutOffers(points);
-  let totalSum = priceWithoutOffers;
-
-  points.forEach((point) => {
-    totalSum += getPontOffersPrice(point, offers);
-  });
-
-  return totalSum;
-};
+const getPrice = (points, offers) => getPriceWithoutOffers(points) + points.reduce((sum, point) => sum + getPontOffersPrice(point, offers), 0);
 
 const createTripInfoTemplate = (points, destinations, offers) =>
   `<section class="trip-main__trip-info  trip-info">
