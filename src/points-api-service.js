@@ -56,6 +56,7 @@ export default class PointApiService extends ApiService {
       'date_to': point.timeEnd ? dayjs(point.timeEnd).toISOString() : null,
       'is_favorite': Boolean(point.isFavorite),
       'destination': point.destinationId,
+      'offers': point.offers ? point.offers : [],
     };
 
     delete adaptedPoint.price;

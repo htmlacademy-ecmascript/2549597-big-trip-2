@@ -1,5 +1,5 @@
 import RouteListPoints from '../view/points-list-view.js';
-import {render, RenderPosition, remove, replace} from '../framework/render.js';
+import {render, RenderPosition, remove} from '../framework/render.js';
 import EmptyList from '../view/empty-list.js';
 import PointPresenter from '../presenter/point-presenter.js';
 import NewPointPresenter from '../presenter/new-point-presenter.js';
@@ -180,26 +180,16 @@ export default class Presenter {
     }
 
     this.#renderPoints();
-    this.#renderTripInfo();
   }
 
   #renderTripInfo = () => {
-    const prevTripInfoComponent = this.#tripInfoComponent;
-
     this.#tripInfoComponent = new TripInfoView({
       points: this.#pointModel.points,
       destinations: this.#destinationModel.destination,
       offers: this.#offerModel.offers,
     });
 
-    if (prevTripInfoComponent === null) {
-      render(this.#tripInfoComponent, this.#tripInfoContainer, 'afterbegin');
-
-      return;
-    }
-
-    replace(this.#tripInfoComponent, prevTripInfoComponent);
-    remove(prevTripInfoComponent);
+    render(this.#tripInfoComponent, this.#tripInfoContainer, 'afterbegin');
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -226,6 +216,7 @@ export default class Presenter {
       return;
     }
 
+    this.#renderTripInfo();
     this.#renderSorting();
 
     this.points.forEach((point) => {
