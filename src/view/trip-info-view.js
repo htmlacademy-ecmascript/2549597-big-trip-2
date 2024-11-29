@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getPriceWithoutOffers, getPontOffersPrice, getDestination, getCurrentDate} from '../utils/point.js';
+import {getPriceWithoutOffers, getPontOffersPrice, getDestination, getCurrentDate, sortPointsByDay} from '../utils/point.js';
 
 const getDate = (points) => {
   switch (points) {
@@ -52,7 +52,7 @@ export default class TripInfoView extends AbstractView {
 
   constructor({points, destinations, offers}) {
     super();
-    this.#points = points;
+    this.#points = points.sort(sortPointsByDay);
     this.#destinations = destinations;
     this.#offers = offers;
   }
