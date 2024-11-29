@@ -23,7 +23,7 @@ const pointModel = new PointModel({pointApiService: new PointApiService(END_POIN
 const destinationModel = new DestinationModel({destinationApiService: new DestinationApiService(END_POINT, AUTHORIZATION)});
 const offerModel = new OfferModel({offersApiService: new OfferApiService(END_POINT, AUTHORIZATION)});
 const filterModel = new FilterModel();
-const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, priceContainer: newBtnContainer, destinationContainer: destinationContainer});
+const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, priceContainer: newBtnContainer, destinationContainer: destinationContainer, dateContainer: destinationContainer});
 const filterPresenter = new FilterPresenter({filterContainer: siteFilterContainer, filterModel, pointModel});
 
 const newPointButtonComponent = new NewPointButtonView({

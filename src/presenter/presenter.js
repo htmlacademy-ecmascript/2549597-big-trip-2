@@ -11,6 +11,7 @@ import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import TotalPrice from '../view/total-price-view.js';
 import Destination from '../view/destination-view.js';
+import CurrendDate from '../view/date-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -40,8 +41,10 @@ export default class Presenter {
   #priceContainer = null;
   #totalPriceComponent = null;
   #destinationComponent = null;
+  #dateComponent = null;
+  #dateContainer = null;
 
-  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, priceContainer, destinationContainer}) {
+  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, priceContainer, destinationContainer, dateContainer}) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#destinationModel = destinationModel;
@@ -49,6 +52,7 @@ export default class Presenter {
     this.#filterModel = filterModel;
     this.#priceContainer = priceContainer;
     this.#destinationContainer = destinationContainer;
+    this.#dateContainer = dateContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#container,
@@ -185,8 +189,26 @@ export default class Presenter {
 
     this.#renderPoints();
     this.#renderTotalPrice();
+    this.#renderDate();
     this.#renderDestination();
   }
+
+  #renderDate = () => {
+    const prevDateComponent = this.#dateComponent;
+
+    this.#dateComponent = new CurrendDate({
+      points: this.#pointModel.points,
+    });
+
+    if (prevDateComponent === null) {
+      render(this.#dateComponent, this.#dateContainer, 'afterbegin');
+
+      return;
+    }
+
+    replace(this.#dateComponent, prevDateComponent);
+    remove(prevDateComponent);
+  };
 
   #renderDestination = () => {
     const prevDestinationComponent = this.#destinationComponent;
@@ -222,7 +244,7 @@ export default class Presenter {
     });
 
     if (prevTotalPriceComponent === null) {
-      render(this.#totalPriceComponent, this.#priceContainer, 'afterend');
+      render(this.#totalPriceComponent, this.#priceContainer, 'afterend');////////////////////////////////КАК ЭТО ПРАВИЛЬНО ОТРИСОВАТЬ?
 
       return;
     }
