@@ -6,12 +6,10 @@ import NewPointPresenter from '../presenter/new-point-presenter.js';
 import {filter} from '../utils/filter.js';
 import Sorting from '../view/sorting-view.js';
 import {SortTypes, UserAction, UpdateType, FilterType} from '../constants.js';
-import {getPriceWithoutOffers, getPontOffersPrice, sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/point.js';
+import {sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/point.js';
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
-import TotalPrice from '../view/total-price-view.js';
-import Destination from '../view/destination-view.js';
-import CurrendDate from '../view/date-view.js';
+import TripInfoView from '../view/trip-info-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -37,22 +35,16 @@ export default class Presenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  #destinationContainer = null;
-  #priceContainer = null;
-  #totalPriceComponent = null;
-  #destinationComponent = null;
-  #dateComponent = null;
-  #dateContainer = null;
+  #tripInfoContainer = null;
+  #tripInfoComponent = null;
 
-  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, priceContainer, destinationContainer, dateContainer}) {
+  constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, tripInfoContainer}) {
     this.#container = container;
     this.#pointModel = pointModel;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
-    this.#priceContainer = priceContainer;
-    this.#destinationContainer = destinationContainer;
-    this.#dateContainer = dateContainer;
+    this.#tripInfoContainer = tripInfoContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#container,
@@ -188,69 +180,26 @@ export default class Presenter {
     }
 
     this.#renderPoints();
-    this.#renderTotalPrice();
-    this.#renderDate();
-    this.#renderDestination();
+    this.#renderTripInfo();
   }
 
-  #renderDate = () => {
-    const prevDateComponent = this.#dateComponent;
+  #renderTripInfo = () => {
+    const prevTripInfoComponent = this.#tripInfoComponent;
 
-    this.#dateComponent = new CurrendDate({
-      points: this.#pointModel.points,
-    });
-
-    if (prevDateComponent === null) {
-      render(this.#dateComponent, this.#dateContainer, 'afterbegin');
-
-      return;
-    }
-
-    replace(this.#dateComponent, prevDateComponent);
-    remove(prevDateComponent);
-  };
-
-  #renderDestination = () => {
-    const prevDestinationComponent = this.#destinationComponent;
-
-    this.#destinationComponent = new Destination({
+    this.#tripInfoComponent = new TripInfoView({
       points: this.#pointModel.points,
       destinations: this.#destinationModel.destination,
+      offers: this.#offerModel.offers,
     });
 
-    if (prevDestinationComponent === null) {
-      render(this.#destinationComponent, this.#destinationContainer, 'afterbegin');
+    if (prevTripInfoComponent === null) {
+      render(this.#tripInfoComponent, this.#tripInfoContainer, 'afterbegin');
 
       return;
     }
 
-    replace(this.#destinationComponent, prevDestinationComponent);
-    remove(prevDestinationComponent);
-  };
-
-  #renderTotalPrice = () => {
-    const prevTotalPriceComponent = this.#totalPriceComponent;
-
-    const priceWithoutOffers = getPriceWithoutOffers(this.#pointModel.points);
-
-    let totalSum = priceWithoutOffers;
-    this.#pointModel.points.forEach((point) => {
-
-      totalSum += getPontOffersPrice(point, this.#offerModel.offers);
-    });
-
-    this.#totalPriceComponent = new TotalPrice({
-      totalPrice: totalSum,
-    });
-
-    if (prevTotalPriceComponent === null) {
-      render(this.#totalPriceComponent, this.#priceContainer, 'afterend');////////////////////////////////КАК ЭТО ПРАВИЛЬНО ОТРИСОВАТЬ?
-
-      return;
-    }
-
-    replace(this.#totalPriceComponent, prevTotalPriceComponent);
-    remove(prevTotalPriceComponent);
+    replace(this.#tripInfoComponent, prevTripInfoComponent);
+    remove(prevTripInfoComponent);
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -311,6 +260,7 @@ export default class Presenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
+    remove(this.#tripInfoComponent);
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
 

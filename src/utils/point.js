@@ -30,4 +30,4 @@ export const getPontOffersPrice = (point, allOffers) => {
   return totalSum;
 };
 
-export const getCurrentDate = (date) => dayjs(date).format('MMM-DD');
+export const getCurrentDate = (date) => dayjs(date).format('MMM DD');
