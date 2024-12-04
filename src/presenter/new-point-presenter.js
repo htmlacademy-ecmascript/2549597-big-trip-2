@@ -4,15 +4,15 @@ import {UserAction, UpdateType} from '../constants.js';
 import { isEscKey } from '../utils/utils.js';
 
 export default class NewPointPresenter {
-  #pointListContainer = null;
+  #pointContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
   #pointEditComponent = null;
   #destinationModel = null;
   #offerModel = null;
 
-  constructor({pointListContainer, onDataChange, onDestroy, destinationModel, offerModel}) {
-    this.#pointListContainer = pointListContainer;
+  constructor({pointContainer, onDataChange, onDestroy, destinationModel, offerModel}) {
+    this.#pointContainer = pointContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
     this.#destinationModel = destinationModel;
@@ -36,7 +36,7 @@ export default class NewPointPresenter {
       onCloseForm: this.#handleDeleteClick,
     });
 
-    render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+    render(this.#pointEditComponent, this.#pointContainer.querySelector('.trip-events__list'), RenderPosition.AFTERBEGIN);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }

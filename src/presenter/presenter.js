@@ -10,6 +10,7 @@ import {sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/poi
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import TripInfoView from '../view/trip-info-view.js';
+import ErrorView from '../view/error-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -18,6 +19,7 @@ const TimeLimit = {
 export default class Presenter {
   #routeListPoints = new RouteListPoints();
   #loadingComponent = new LoadingView();
+  #errorComponent = new ErrorView();
   #emptyListPoints = null;
   #sortComponent = null;
   #container = null;
@@ -37,6 +39,7 @@ export default class Presenter {
 
   #tripInfoContainer = null;
   #tripInfoComponent = null;
+  #onNewPointDestroy = null;
 
   constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, tripInfoContainer}) {
     this.#container = container;
@@ -45,11 +48,12 @@ export default class Presenter {
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
     this.#tripInfoContainer = tripInfoContainer;
+    this.#onNewPointDestroy = onNewPointDestroy;
 
     this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#container,
+      pointContainer: this.#container,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy,
+      onDestroy: this.#destroyPoint,
       destinationModel: destinationModel,
       offerModel: offerModel,
     });
@@ -59,6 +63,14 @@ export default class Presenter {
     this.#destinationModel.addObserver(this.#handleModelEvent);
     this.#offerModel.addObserver(this.#handleModelEvent);
   }
+
+  #destroyPoint = () => {
+    this.#onNewPointDestroy();
+
+    if (!this.points.length) {
+      this.#renderNoPoint();
+    }
+  };
 
   get points() {
     this.#filterType = this.#filterModel.filter;
@@ -140,6 +152,7 @@ export default class Presenter {
         this.#clearBoard();
         this.#isLoading = false;
         remove(this.#loadingComponent);
+        remove(this.#errorComponent);
         this.#renderBoard();
 
         break;
@@ -150,10 +163,16 @@ export default class Presenter {
     render(this.#loadingComponent, this.#container, RenderPosition.AFTERBEGIN);
   }
 
+  #renderError() {
+    render(this.#errorComponent, this.#container, RenderPosition.AFTERBEGIN);
+  }
+
   createPoint() {
     this.#currentSortType = SortTypes.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
+
+    remove(this.#emptyListPoints);
   }
 
   #renderNoPoint() {
@@ -173,7 +192,15 @@ export default class Presenter {
       return;
     }
 
-    if (this.points.length < 1) {
+    if (this.points.includes('error')
+      || !this.#destinationModel.destination.length
+      || !this.#offerModel.offers.length) {
+      this.#renderError();
+
+      return;
+    }
+
+    if (!this.points.length) {
       this.#renderNoPoint();
 
       return;
@@ -222,10 +249,6 @@ export default class Presenter {
     this.points.forEach((point) => {
       this.#renderPoint(point);
     });
-
-    if (this.points.length === 0) {
-      this.#renderNoPoint();
-    }
   }
 
   #renderPoint (point) {
@@ -254,6 +277,7 @@ export default class Presenter {
     remove(this.#tripInfoComponent);
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
+    remove(this.#errorComponent);
 
     if (this.#emptyListPoints) {
       remove(this.#emptyListPoints);

@@ -18,12 +18,12 @@ const tripInfoContainer = document.querySelector('.trip-main');
 const newBtnContainer = document.querySelector('.trip-main__trip-controls');
 const siteFilterContainer = siteHeader.querySelector('.trip-controls__filters');
 const siteMain = document.querySelector('.page-body__page-main');
-const siteSortingContainer = siteMain.querySelector('.trip-events');
+const tripEventsContainer = siteMain.querySelector('.trip-events');
 const pointModel = new PointModel({pointApiService: new PointApiService(END_POINT, AUTHORIZATION)});
 const destinationModel = new DestinationModel({destinationApiService: new DestinationApiService(END_POINT, AUTHORIZATION)});
 const offerModel = new OfferModel({offersApiService: new OfferApiService(END_POINT, AUTHORIZATION)});
 const filterModel = new FilterModel();
-const presenter = new Presenter({container: siteSortingContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, tripInfoContainer: tripInfoContainer});
+const presenter = new Presenter({container: tripEventsContainer, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy: handleNewPointFormClose, tripInfoContainer: tripInfoContainer});
 const filterPresenter = new FilterPresenter({filterContainer: siteFilterContainer, filterModel, pointModel});
 
 const newPointButtonComponent = new NewPointButtonView({

@@ -1,9 +1,9 @@
 export const FAVORITE = [true, false];
 export const FilterType = {
-  PAST: 'past',
   EVERYTHING: 'everything',
-  PRESENT: 'present',
   FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
 };
 export const SortTypes = {
   PRICE: 'price',

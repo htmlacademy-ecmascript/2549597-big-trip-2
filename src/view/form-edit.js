@@ -64,8 +64,31 @@ function createFormEditTemplate(point, destination, offers) {
   const photoArray = photos ? getPhoto(photos) : '';
   const dateStart = timeStart ? getDate(timeStart, 'DD/MM/YY HH:mm') : '';
   const dateEnd = timeEnd ? getDate(timeEnd, 'DD/MM/YY HH:mm') : '';
+  const getDestinationBlock = () => {
+    if (!currentDestination || !townName || !description) {
+      return '';
+    }
 
-  return (`<form class="event event--edit" action="#" method="post">
+    return `<section class="event__section  event__section--destination">
+                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                    <p class="event__destination-description">${description || ''}</p>
+                    ${photoArray.length ? `<div class="event__photos-container">
+                      <div class="event__photos-tape">
+                        ${photoArray}
+                      </div>
+                    </div>` : ''}
+                  </section>`;
+  };
+  const getButtonText = () => {
+    if (!currentDestination) {
+      return 'Cancel';
+    }
+
+    return isDeleting ? 'Deleting...' : 'Delete';
+  };
+
+  return (`<li class="trip-events__item">
+            <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -153,31 +176,22 @@ function createFormEditTemplate(point, destination, offers) {
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${getButtonText()}</button>
                   <button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
+                ${currentOffers.length ? `<section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
                     <div class="event__available-offers">
                       ${getOffer(currentOffers, point, isDisabled)}
                     </div>
-                  </section>
-
-                  <section class="event__section  event__section--destination">
-                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description || ''}</p>
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${photoArray}
-                      </div>
-                    </div>
-                  </section>
+                  </section>` : ''}
+                  ${getDestinationBlock()}
                 </section>
-              </form>`);
+              </form>
+            </li>`);
 }
 
 export default class FormEdit extends AbstractStatefulView{
@@ -230,7 +244,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#editOffersHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#editOffersHandler);
 
     this.#setDatepicker();
   }
@@ -311,13 +325,13 @@ export default class FormEdit extends AbstractStatefulView{
   }
 
   #dateStartChangeHandler = ([userDate]) => {
-    this.updateElement({
+    this._setState({
       timeStart: userDate,
     });
   };
 
   #dateEndChangeHandler = ([userDate]) => {
-    this.updateElement({
+    this._setState({
       timeEnd: userDate,
     });
   };
@@ -328,16 +342,14 @@ export default class FormEdit extends AbstractStatefulView{
       {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dueDate,
         onChange: this.#dateStartChangeHandler,
       });
 
-    this.#datepickerStart = flatpickr(
+    this.#datepickerEnd = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
-        defaultDate: this._state.dueDate,
         onChange: this.#dateEndChangeHandler,
       }
     );
