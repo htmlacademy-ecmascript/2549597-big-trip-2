@@ -65,7 +65,7 @@ function createFormEditTemplate(point, destination, offers) {
   const dateStart = timeStart ? getDate(timeStart, 'DD/MM/YY HH:mm') : '';
   const dateEnd = timeEnd ? getDate(timeEnd, 'DD/MM/YY HH:mm') : '';
   const getDestinationBlock = () => {
-    if (!currentDestination && !townName && !description) {
+    if (!currentDestination || !townName || !description) {
       return '';
     }
 
@@ -244,7 +244,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#editOffersHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#editOffersHandler);
 
     this.#setDatepicker();
   }

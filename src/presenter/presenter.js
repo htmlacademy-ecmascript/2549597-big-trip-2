@@ -39,6 +39,7 @@ export default class Presenter {
 
   #tripInfoContainer = null;
   #tripInfoComponent = null;
+  #onNewPointDestroy = null;
 
   constructor ({container, pointModel, destinationModel, offerModel, filterModel, onNewPointDestroy, tripInfoContainer}) {
     this.#container = container;
@@ -47,11 +48,12 @@ export default class Presenter {
     this.#offerModel = offerModel;
     this.#filterModel = filterModel;
     this.#tripInfoContainer = tripInfoContainer;
+    this.#onNewPointDestroy = onNewPointDestroy;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointContainer: this.#container,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy,
+      onDestroy: this.#destroyPoint,
       destinationModel: destinationModel,
       offerModel: offerModel,
     });
@@ -61,6 +63,14 @@ export default class Presenter {
     this.#destinationModel.addObserver(this.#handleModelEvent);
     this.#offerModel.addObserver(this.#handleModelEvent);
   }
+
+  #destroyPoint = () => {
+    this.#onNewPointDestroy();
+
+    if (!this.points.length) {
+      this.#renderNoPoint();
+    }
+  };
 
   get points() {
     this.#filterType = this.#filterModel.filter;
@@ -161,6 +171,8 @@ export default class Presenter {
     this.#currentSortType = SortTypes.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
+
+    remove(this.#emptyListPoints);
   }
 
   #renderNoPoint() {
