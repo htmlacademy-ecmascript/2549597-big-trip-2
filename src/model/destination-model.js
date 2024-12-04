@@ -16,9 +16,9 @@ export default class DestinationModel extends Observable{
 
   async init() {
     try {
-      const destination = await this.#destinationApiService.destinations;
+      const currentDestinationsCards = await this.#destinationApiService.destinations;
 
-      this.#destinationCards = destination.map(this.#adaptToClient);
+      this.#destinationCards = currentDestinationsCards.map(this.#adaptToClient);
       this._notify(UpdateType.INIT);
     } catch(err) {
       this.#destinationCards = [];

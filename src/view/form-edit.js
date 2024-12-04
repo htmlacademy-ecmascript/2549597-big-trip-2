@@ -195,7 +195,6 @@ function createFormEditTemplate(point, destination, offers) {
 }
 
 export default class FormEdit extends AbstractStatefulView{
-  #point = null;
   #destination = null;
   #offer = null;
   #handleSubmit = null;

@@ -258,16 +258,12 @@ export default class Presenter {
       offerModel: this.#offerModel,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
-      onPointClear: this.#clearPoint});
+    });
 
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #clearPoint = (point) => {
-    const targetPresenter = this.#pointPresenters.get(point.id);
-    targetPresenter.destroy();
-  };
 
   #clearBoard({resetSortType = false} = {}) {
     this.#newPointPresenter.destroy();
