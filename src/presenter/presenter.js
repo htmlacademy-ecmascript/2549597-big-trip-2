@@ -10,6 +10,7 @@ import {sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/poi
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import TripInfoView from '../view/trip-info-view.js';
+import ErrorView from '../view/error-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -18,6 +19,7 @@ const TimeLimit = {
 export default class Presenter {
   #routeListPoints = new RouteListPoints();
   #loadingComponent = new LoadingView();
+  #errorComponent = new ErrorView();
   #emptyListPoints = null;
   #sortComponent = null;
   #container = null;
@@ -47,7 +49,7 @@ export default class Presenter {
     this.#tripInfoContainer = tripInfoContainer;
 
     this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#container,
+      pointContainer: this.#container,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewPointDestroy,
       destinationModel: destinationModel,
@@ -140,6 +142,7 @@ export default class Presenter {
         this.#clearBoard();
         this.#isLoading = false;
         remove(this.#loadingComponent);
+        remove(this.#errorComponent);
         this.#renderBoard();
 
         break;
@@ -148,6 +151,10 @@ export default class Presenter {
 
   #renderLoading() {
     render(this.#loadingComponent, this.#container, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderError() {
+    render(this.#errorComponent, this.#container, RenderPosition.AFTERBEGIN);
   }
 
   createPoint() {
@@ -169,6 +176,14 @@ export default class Presenter {
 
     if (this.#isLoading) {
       this.#renderLoading();
+
+      return;
+    }
+
+    if (!this.points.length
+      || !this.#pointModel.destinations
+      || !this.#pointModel.offers) {
+      this.#renderError();
 
       return;
     }
@@ -254,6 +269,7 @@ export default class Presenter {
     remove(this.#tripInfoComponent);
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
+    remove(this.#errorComponent);
 
     if (this.#emptyListPoints) {
       remove(this.#emptyListPoints);
