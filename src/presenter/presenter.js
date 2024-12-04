@@ -180,7 +180,7 @@ export default class Presenter {
       return;
     }
 
-    if (!this.points.length
+    if (this.points.includes('error')
       || !this.#destinationModel.destination.length
       || !this.#offerModel.offers.length) {
       this.#renderError();
