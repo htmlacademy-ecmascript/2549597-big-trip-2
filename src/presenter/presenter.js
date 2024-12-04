@@ -181,14 +181,14 @@ export default class Presenter {
     }
 
     if (!this.points.length
-      || !this.#pointModel.destinations
-      || !this.#pointModel.offers) {
+      || !this.#destinationModel.destination.length
+      || !this.#offerModel.offers.length) {
       this.#renderError();
 
       return;
     }
 
-    if (this.points.length < 1) {
+    if (!this.points.length) {
       this.#renderNoPoint();
 
       return;
@@ -237,10 +237,6 @@ export default class Presenter {
     this.points.forEach((point) => {
       this.#renderPoint(point);
     });
-
-    if (this.points.length === 0) {
-      this.#renderNoPoint();
-    }
   }
 
   #renderPoint (point) {

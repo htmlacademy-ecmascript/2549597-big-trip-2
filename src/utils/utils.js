@@ -31,7 +31,7 @@ export const convertFirstLetter = (word) => word.charAt(0).toUpperCase() + word.
 export const getConvertedTime = ({days, hours, minutes}) => {
   const formattedDays = days ? `${checkNumberMoreNine(days)}${days}D ` : '';
   const formattedHours = hours ? `${checkNumberMoreNine(hours)}${hours}H ` : '';
-  const formattedMinutes = minutes ? `${checkNumberMoreNine(minutes)}${minutes}M ` : '';
+  const formattedMinutes = `${checkNumberMoreNine(minutes)}${minutes}M `;
 
   return formattedDays + formattedHours + formattedMinutes;
 };
