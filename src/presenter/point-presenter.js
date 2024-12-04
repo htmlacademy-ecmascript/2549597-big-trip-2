@@ -19,18 +19,15 @@ export default class PointPresenter {
 
   #routePoint = null;
   #formEdit = null;
-
-  #clearPoint = null;
   #point = null;
   #mode = Mode.DEFAULT;
 
-  constructor({pointContainer, destinationModel, offerModel, onDataChange, onModeChange, onPointClear}) {
+  constructor({pointContainer, destinationModel, offerModel, onDataChange, onModeChange}) {
     this.#pointContainer = pointContainer;
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
-    this.#clearPoint = onPointClear;
   }
 
   init(point) {
