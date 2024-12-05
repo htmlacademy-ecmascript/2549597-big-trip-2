@@ -2,15 +2,6 @@ import dayjs from 'dayjs';
 
 const checkNumberMoreNine = (number) => number > 9 ? '' : '0';
 
-export const getRandomArrayElement = (array) => array[Math.floor(Math.random() * array.length)];
-export const getRandomValue = (min, max) => {
-  const lower = Math.ceil(Math.min(min, max));
-  const upper = Math.floor(Math.max(min, max));
-  const result = Math.random() * (upper - lower + 1) + lower;
-
-  return Math.floor(result);
-};
-
 export const getDate = (date, format) => date ? dayjs(date).format(format) : '';
 
 export const getDifferenceDate = (start, end) => {

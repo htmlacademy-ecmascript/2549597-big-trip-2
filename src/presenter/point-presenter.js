@@ -1,5 +1,5 @@
 import FormEdit from '../view/form-edit.js';
-import RoutePoint from '../view/point-view.js';
+import PointView from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {isEscKey} from '../utils/utils.js';
 import {UserAction, UpdateType} from '../constants.js';
@@ -36,7 +36,7 @@ export default class PointPresenter {
     const prevRoutePoint = this.#routePoint;
     const prevFormEdit = this.#formEdit;
 
-    this.#routePoint = new RoutePoint({
+    this.#routePoint = new PointView({
       point: this.#point,
       destination: this.#destinationModel.getDestinationById(this.#point.destinationId),
       offer: this.#offerModel.getOffersByType(this.#point.type),
@@ -121,7 +121,7 @@ export default class PointPresenter {
       update,
     );
 
-    document.removeEventListener('keydown', this.#onEditFormKeydown);
+    document.removeEventListener('keydown', this.#editFormCloseHandler);
   };
 
   #handleFormSubmit = (update) => {
@@ -137,7 +137,7 @@ export default class PointPresenter {
     remove(this.#routePoint);
   }
 
-  #onEditFormKeydown = (evt) => {
+  #editFormCloseHandler = (evt) => {
     if (isEscKey(evt)) {
       evt.preventDefault();
       this.#formEdit.reset(this.#point);
@@ -149,13 +149,13 @@ export default class PointPresenter {
     replace(this.#formEdit, this.#routePoint);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
-    document.addEventListener('keydown', this.#onEditFormKeydown);
+    document.addEventListener('keydown', this.#editFormCloseHandler);
   }
 
   #replaceFormToPoint() {
     replace(this.#routePoint, this.#formEdit);
     this.#mode = Mode.DEFAULT;
-    document.removeEventListener('keydown', this.#onEditFormKeydown);
+    document.removeEventListener('keydown', this.#editFormCloseHandler);
   }
 
   #handleFavoriteClick = () => {

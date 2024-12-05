@@ -231,7 +231,7 @@ export default class FormEdit extends AbstractStatefulView{
     this.#handleFormDelete(FormEdit.parseStateToPoint(this._state));
   };
 
-  #handleClose = (evt) => {
+  #btnCloseFormHandler = (evt) => {
     evt.preventDefault();
     this.#handleCloseForm(FormEdit.parseStateToPoint(this._state));
   };
@@ -239,16 +239,16 @@ export default class FormEdit extends AbstractStatefulView{
   _restoreHandlers() {
     this.element.addEventListener('submit', this.#submitHandler);
     this.element.addEventListener('reset', this.#deleteHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#handleClose);
-    this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceHandler);
-    this.element.querySelector('.event__type-group').addEventListener('change', this.#formVehicleTypeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationHandler);
-    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#editOffersHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#btnCloseFormHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#inputChangePriceHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#inputChangeEventTypeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#datalistDestinationChangeHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#inputChangeOffersHandler);
 
     this.#setDatepicker();
   }
 
-  #formVehicleTypeHandler = (evt) => {
+  #inputChangeEventTypeHandler = (evt) => {
     evt.preventDefault();
     this.element.querySelector('.event__label').textContent = evt.target.value;
 
@@ -259,7 +259,7 @@ export default class FormEdit extends AbstractStatefulView{
     });
   };
 
-  #editOffersHandler = (evt) => {
+  #inputChangeOffersHandler = (evt) => {
     evt.preventDefault();
     const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
 
@@ -268,7 +268,7 @@ export default class FormEdit extends AbstractStatefulView{
     });
   };
 
-  #formDestinationHandler = (evt) => {
+  #datalistDestinationChangeHandler = (evt) => {
     evt.preventDefault();
 
     const currentDestination = this.#destination.destination.find((destination) => destination.townName === evt.target.value);
@@ -287,7 +287,7 @@ export default class FormEdit extends AbstractStatefulView{
     });
   };
 
-  #formPriceHandler = (evt) => {
+  #inputChangePriceHandler = (evt) => {
     evt.preventDefault();
     this._setState({...this._state,
       price: Number(evt.target.value),
