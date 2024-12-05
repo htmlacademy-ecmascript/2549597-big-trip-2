@@ -3,11 +3,11 @@ import {UpdateType} from '../constants.js';
 import Observable from '../framework/observable.js';
 export default class PointModel extends Observable{
   #points = [];
-  #pointApiService = null;
+  #pointsApiService = null;
 
-  constructor ({pointApiService}) {
+  constructor ({pointsApiService}) {
     super();
-    this.#pointApiService = pointApiService;
+    this.#pointsApiService = pointsApiService;
   }
 
   get points() {
@@ -16,7 +16,7 @@ export default class PointModel extends Observable{
 
   async init() {
     try {
-      const points = await this.#pointApiService.points;
+      const points = await this.#pointsApiService.points;
 
       this.#points = points.map(this.#adaptToClient);
     } catch(err) {
@@ -53,7 +53,7 @@ export default class PointModel extends Observable{
     }
 
     try {
-      const response = await this.#pointApiService.updatePoint(update);
+      const response = await this.#pointsApiService.updatePoint(update);
       const updatedPoint = this.#adaptToClient(response);
 
       this.#points = [
@@ -70,7 +70,7 @@ export default class PointModel extends Observable{
 
   async addPoint(updateType, update) {
     try {
-      const response = await this.#pointApiService.addPoint(update);
+      const response = await this.#pointsApiService.addPoint(update);
       const newPoint = this.#adaptToClient(response);
       this.#points = [
         newPoint,
@@ -90,7 +90,7 @@ export default class PointModel extends Observable{
     }
 
     try {
-      await this.#pointApiService.deletePoint(update);
+      await this.#pointsApiService.deletePoint(update);
       this.#points = [
         ...this.#points.slice(0, index),
         ...this.#points.slice(index + 1),

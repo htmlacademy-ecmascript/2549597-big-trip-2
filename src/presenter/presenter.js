@@ -1,10 +1,10 @@
-import RouteListPoints from '../view/points-list-view.js';
+import PointsListView from '../view/points-list-view.js';
 import {render, RenderPosition, remove} from '../framework/render.js';
 import EmptyList from '../view/empty-list.js';
 import PointPresenter from '../presenter/point-presenter.js';
 import NewPointPresenter from '../presenter/new-point-presenter.js';
 import {filter} from '../utils/filter.js';
-import Sorting from '../view/sorting-view.js';
+import SortingView from '../view/sorting-view.js';
 import {SortTypes, UserAction, UpdateType, FilterType} from '../constants.js';
 import {sortPointsByDay, sortPointsByPrice, sortPointsByTime} from '../utils/point.js';
 import LoadingView from '../view/loading-view.js';
@@ -17,7 +17,7 @@ const TimeLimit = {
   UPPER_LIMIT: 1000,
 };
 export default class Presenter {
-  #routeListPoints = new RouteListPoints();
+  #routeListPoints = new PointsListView();
   #loadingComponent = new LoadingView();
   #errorComponent = new ErrorView();
   #emptyListPoints = null;
@@ -230,7 +230,7 @@ export default class Presenter {
   };
 
   #renderSorting() {
-    this.#sortComponent = new Sorting({
+    this.#sortComponent = new SortingView({
       currentSort: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange,
     });

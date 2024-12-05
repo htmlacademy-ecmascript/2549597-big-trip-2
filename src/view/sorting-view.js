@@ -32,7 +32,7 @@ function createSortingTemplate(type) {
           </form>`);
 }
 
-export default class Sorting extends AbstractView{
+export default class SortingView extends AbstractView{
   #handleSortTypeChange = null;
   #currentSort = null;
 

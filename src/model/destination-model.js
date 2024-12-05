@@ -3,11 +3,11 @@ import Observable from '../framework/observable.js';
 
 export default class DestinationModel extends Observable{
   #destinationCards = [];
-  #destinationApiService = null;
+  #destinationsApiService = null;
 
-  constructor ({destinationApiService}) {
+  constructor ({destinationsApiService}) {
     super();
-    this.#destinationApiService = destinationApiService;
+    this.#destinationsApiService = destinationsApiService;
   }
 
   get destination() {
@@ -16,7 +16,7 @@ export default class DestinationModel extends Observable{
 
   async init() {
     try {
-      const currentDestinationsCards = await this.#destinationApiService.destinations;
+      const currentDestinationsCards = await this.#destinationsApiService.destinations;
 
       this.#destinationCards = currentDestinationsCards.map(this.#adaptToClient);
       this._notify(UpdateType.INIT);

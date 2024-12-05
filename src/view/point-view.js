@@ -68,7 +68,7 @@ function createRoutePointTemplate(point, destination, offer) {
             </li>`);
 }
 
-export default class RoutePoint extends AbstractView{
+export default class PointView extends AbstractView{
   #point = null;
   #destination = null;
   #offer = null;
